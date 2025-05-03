@@ -11,7 +11,7 @@ import {
 
 const problemRoutes = express.Router();
 
-problemRoutes.get("/create-problem", authMiddleware, checkAdmin, createProblem);
+problemRoutes.post("/create-problem", authMiddleware, checkAdmin, createProblem);
 
 problemRoutes.get("/get-all-problems", authMiddleware, getAllProblems);
 
