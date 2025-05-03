@@ -61,7 +61,7 @@ export const checkAdmin = async (req, res, next) => {
         message: "Access Denied - Admins Only",
       });
     }
-
+   console.log("done checkadmin -->")
     next();
   } catch (error) {
     console.error("Error in checkAdmin", error);

@@ -2,9 +2,9 @@ import axios from "axios";
 
 export const getJudge0LanguageId = (Language) => {
   const languageMap = {
-    python3: 71,
-    java: 62,
-    javascript: 63,
+    PYTHON: 71,
+    JAVA: 62,
+    JAVASCRIPT: 63,
   };
   return languageMap[Language.toUpperCase()];
 };
@@ -27,7 +27,7 @@ const sleep = async (ms) => {
 
 export const pollBatchResults = async (tokens) => {
   while (true) {
-    const { data } = await axios.get(`${process.env.JUDGE0_API_URL}`, {
+    const { data } = await axios.get(`${process.env.JUDGE0_API_URL}/submissions/batch`, {
       params: {
         tokens: tokens.join(","),
         base64_encoded: false,

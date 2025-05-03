@@ -1,5 +1,9 @@
 import { db } from "../libs/db.js";
-import { pollBatchResults, submitBatch } from "../libs/judge0.lib.js";
+import {
+  getJudge0LanguageId,
+  pollBatchResults,
+  submitBatch,
+} from "../libs/judge0.lib.js";
 
 export const createProblem = async (req, res) => {
   //  get data from the request body
@@ -11,14 +15,12 @@ export const createProblem = async (req, res) => {
     examples,
     constraints,
     testcases,
-    codesnippets,
-    referenceSolution,
+    codeSnippets,
+    referenceSolutions,
   } = req.body;
-
   try {
-    for (const [language, solutionCode] of Object.entries(referenceSolution)) {
+    for (const [language, solutionCode] of Object.entries(referenceSolutions)) {
       const languageId = getJudge0LanguageId(language);
-
       if (!languageId) {
         return res
           .status(500)
@@ -27,11 +29,10 @@ export const createProblem = async (req, res) => {
 
       const submissions = testcases.map(({ input, output }) => ({
         source_code: solutionCode,
-        langauge_id: languageId,
+        language_id: languageId,
         stdin: input,
         expected_output: output,
       }));
-
       const submissionResults = await submitBatch(submissions);
 
       const tokens = submissionResults.map((res) => res.token);
@@ -40,7 +41,6 @@ export const createProblem = async (req, res) => {
 
       for (let i = 0; i < results.length; i++) {
         const result = results[i];
-
         if (result.status.id !== 3) {
           return res.status(400).json({
             error: `Testcase ${i + 1} failed for language ${language}`,
@@ -56,14 +56,24 @@ export const createProblem = async (req, res) => {
           examples,
           constraints,
           testcases,
-          codesnippets,
-          referenceSolution,
-          userId: req.userId,
+          codeSnippets,
+          referenceSolutions,
+          userId: req.user.id,
         },
       });
-      return res.status(201).json(newProblem);
+      return res.status(201).json({
+        success: true,
+        message: "Problem Created Successfully",
+        problem: newProblem,
+      });
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Error while creating Problem ",
+    });
+  }
   // check if the user is an admin
   // loop through earch refence solution
   // get language id for current language
