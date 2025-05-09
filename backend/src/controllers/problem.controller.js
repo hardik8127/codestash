@@ -206,7 +206,7 @@ export const updateProblem = async (req, res) => {
       problem: updatedProblem,
     });
   } catch (error) {
-    console.error("Error while updating Problem ",error);
+    console.error("Error while updating Problem ", error);
     return res.status(500).json({
       success: false,
       message: "Error while updating Problem ",
@@ -237,10 +237,10 @@ export const deleteProblem = async (req, res) => {
 
     res.status(200).json({
       succes: true,
-      message:"Problem Deleted Successfully"
-    })
+      message: "Problem Deleted Successfully",
+    });
   } catch (error) {
-    console.error("Error while deleting Problem",error)
+    console.error("Error while deleting Problem", error);
     return res.status(500).json({
       success: false,
       message: "Error while deleting the Problem ",
@@ -249,5 +249,34 @@ export const deleteProblem = async (req, res) => {
 };
 
 export const getAllProblemsSolvedByUser = async (req, res) => {
-  
+  try {
+    const problems = await db.problem.findMany({
+      where: {
+        solvedBy: {
+          some: {
+            userId: req.user.id,
+          },
+        },
+      },
+      include: {
+        solvedBy: {
+          where: {
+            userId: req.user.id,
+          },
+        },
+      },
+    });
+
+    res.status(200).json({
+      succes: true,
+      message: "Problem Fetched Successfully",
+      problems,
+    });
+  } catch (error) {
+    console.error("Error in fetching problem", error);
+    res.status(500).json({
+      succes: false,
+      message: "Error in fetching problem",
+    });
+  }
 };
