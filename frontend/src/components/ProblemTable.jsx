@@ -2,16 +2,23 @@ import React, { useState, useMemo } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import { Bookmark, PencilIcon, Trash, TrashIcon, Plus } from "lucide-react";
-import { use } from "react";
+import { useActions } from "../store/useAction";
+import AddToPlaylistModal from "./AddToPlaylist";
+import CreatePlaylistModal from "./CreatePlaylistModal";
+import { usePlaylistStore } from "../store/usePlaylistStore";
 
-const ProblemTable = ({ problems }) => {
+
+const ProblemsTable = ({ problems }) => {
   const { authUser } = useAuthStore();
+  const { onDeleteProblem } = useActions();
+  const { createPlaylist } = usePlaylistStore();
   const [search, setSearch] = useState("");
   const [difficulty, setDifficulty] = useState("ALL");
   const [selectedTag, setSelectedTag] = useState("ALL");
   const [currentPage, setCurrentPage] = useState(1);
-
-  const difficulties = ["EASY", "MEDIUM", "HARD"];
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] = useState(false);
+  const [selectedProblemId, setSelectedProblemId] = useState(null);
 
   // Extract all unique tags from problems
   const allTags = useMemo(() => {
@@ -20,6 +27,9 @@ const ProblemTable = ({ problems }) => {
     problems.forEach((p) => p.tags?.forEach((t) => tagsSet.add(t)));
     return Array.from(tagsSet);
   }, [problems]);
+
+  // Define allowed difficulties
+  const difficulties = ["EASY", "MEDIUM", "HARD"];
 
   // Filter problems based on search, difficulty, and tags
   const filteredProblems = useMemo(() => {
@@ -35,6 +45,7 @@ const ProblemTable = ({ problems }) => {
       );
   }, [problems, search, difficulty, selectedTag]);
 
+  // Pagination logic
   const itemsPerPage = 5;
   const totalPages = Math.ceil(filteredProblems.length / itemsPerPage);
   const paginatedProblems = useMemo(() => {
@@ -59,16 +70,19 @@ const ProblemTable = ({ problems }) => {
 
   return (
     <div className="w-full max-w-6xl mx-auto mt-10">
+      {/* Header with Create Playlist Button */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Problems</h2>
         <button
           className="btn btn-primary gap-2"
-          //   onClick={() => setIsCreateModalOpen(true)}
+          onClick={() => setIsCreateModalOpen(true)}
         >
           <Plus className="w-4 h-4" />
           Create Playlist
         </button>
       </div>
+
+      {/* Filters */}
       <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
         <input
           type="text"
@@ -102,6 +116,8 @@ const ProblemTable = ({ problems }) => {
           ))}
         </select>
       </div>
+
+      {/* Table */}
       <div className="overflow-x-auto rounded-xl shadow-md">
         <table className="table table-zebra table-lg bg-base-200 text-base-content">
           <thead className="bg-base-300">
@@ -130,10 +146,7 @@ const ProblemTable = ({ problems }) => {
                       />
                     </td>
                     <td>
-                      <Link
-                        to={`/problem/${problem.id}`}
-                        className="font-semibold hover:underline"
-                      >
+                      <Link to={`/problem/${problem.id}`} className="font-semibold hover:underline">
                         {problem.title}
                       </Link>
                     </td>
@@ -182,9 +195,7 @@ const ProblemTable = ({ problems }) => {
                           onClick={() => handleAddToPlaylist(problem.id)}
                         >
                           <Bookmark className="w-4 h-4" />
-                          <span className="hidden sm:inline">
-                            Save to Playlist
-                          </span>
+                          <span className="hidden sm:inline">Save to Playlist</span>
                         </button>
                       </div>
                     </td>
@@ -201,6 +212,8 @@ const ProblemTable = ({ problems }) => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
       <div className="flex justify-center mt-6 gap-2">
         <button
           className="btn btn-sm"
@@ -220,8 +233,21 @@ const ProblemTable = ({ problems }) => {
           Next
         </button>
       </div>
+
+      {/* Modals */}
+      <CreatePlaylistModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        onSubmit={handleCreatePlaylist}
+      />
+      
+      <AddToPlaylistModal
+        isOpen={isAddToPlaylistModalOpen}
+        onClose={() => setIsAddToPlaylistModalOpen(false)}
+        problemId={selectedProblemId}
+      />
     </div>
   );
 };
 
-export default ProblemTable;
+export default ProblemsTable;

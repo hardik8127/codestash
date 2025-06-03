@@ -33,5 +33,5 @@ app.use("/api/v1/submission", submissionRoutes);
 app.use("/api/v1/playlist", playlistRoutes);
 
 app.listen(8080, () => {
-  console.log("server is runnig on Port 8080");
+  console.log("server is running on Port 8080");
 });
