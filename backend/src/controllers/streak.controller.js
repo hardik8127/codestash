@@ -22,7 +22,7 @@ export const getStreakHeatmap = async (req, res) => {
       count: streak.count,
     }));
 
-    return res.status(200).json({ message: "Streak heatmap data" });
+    return res.status(200).json({ message: "Streak heatmap data", result });
   } catch (error) {
     console.error("Error fetching heatmap data:", error);
     return res.status(500).json({ message: "Something went wrong" });
