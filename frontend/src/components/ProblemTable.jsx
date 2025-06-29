@@ -80,7 +80,7 @@ const ProblemsTable = ({ problems }) => {
             </div>
           </div>
           <button
-            className="px-6 py-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-md font-medium text-white flex items-center gap-2 hover:opacity-90 transition-all"
+            className="px-6 py-2 bg-blue-600 rounded-md font-medium text-white flex items-center gap-2 hover:bg-blue-700 transition-all"
             onClick={() => setIsCreateModalOpen(true)}
           >
             <Plus className="w-4 h-4" />
