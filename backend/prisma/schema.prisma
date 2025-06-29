@@ -32,6 +32,8 @@ model User {
   submission    Submission[]
   solvedProblem ProblemSolved[]
   playlist      Playlist[]
+
+  userStreak UserStreak[]
 }
 
 model Problem {
@@ -138,4 +140,17 @@ model ProblemsInPlaylist {
   problem  Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
   @@unique([playListId, problemId])
+}
+
+model UserStreak {
+  id        String   @id @default(uuid())
+  userId    String
+  date      DateTime @db.Date
+  count     Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
 }

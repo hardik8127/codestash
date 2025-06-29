@@ -204,6 +204,15 @@ exports.Prisma.ProblemsInPlaylistScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.UserStreakScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  date: 'date',
+  count: 'count',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -246,7 +255,8 @@ exports.Prisma.ModelName = {
   TestCaseResults: 'TestCaseResults',
   ProblemSolved: 'ProblemSolved',
   Playlist: 'Playlist',
-  ProblemsInPlaylist: 'ProblemsInPlaylist'
+  ProblemsInPlaylist: 'ProblemsInPlaylist',
+  UserStreak: 'UserStreak'
 };
 
 /**

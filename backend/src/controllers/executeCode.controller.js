@@ -4,6 +4,7 @@ import {
   submitBatch,
 } from "../libs/judge0.lib.js";
 import { db } from "../libs/db.js";
+import { updateUserStreak } from "../libs/streak.js";
 
 export const executeCode = async (req, res) => {
   try {
@@ -111,6 +112,7 @@ export const executeCode = async (req, res) => {
         },
       });
     }
+    await updateUserStreak(userId);
     //  save for individual test cases using detailresults
     const testCaseResults = detailedResults.map((result) => ({
       submissionId: submission.id,
