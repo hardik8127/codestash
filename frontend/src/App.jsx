@@ -30,7 +30,7 @@ const App = () => {
     );
   }
   return (
-    <div className="flex flex-col items-center justify-start">
+    <div className="w-full">
       <Toaster />      <Routes>
         {/* Landing page as the default route */}
         <Route path="/" element={

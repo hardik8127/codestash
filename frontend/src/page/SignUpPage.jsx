@@ -1,4 +1,4 @@
-import React , {useState} from 'react'
+import React, {useState} from 'react'
 import {useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod"
 import { Link } from 'react-router-dom'
@@ -9,6 +9,7 @@ import {
   Loader2,
   Lock,
   Mail,
+  User
 } from "lucide-react";
 
 import {z} from "zod";
@@ -47,124 +48,130 @@ const SignUpPage = () => {
 
   return (
     <div className='h-screen grid lg:grid-cols-2'>
-        <div className="flex flex-col justify-center items-center p-6 sm:p-12">
-        <div className="w-full max-w-md space-y-8">
-          {/* Logo */}
+        <div className="flex flex-col justify-center items-center p-6 sm:p-12 bg-gray-900 relative">
+          {/* Background effects */}
+          <div className="absolute inset-0 z-0 opacity-60">
+            <div className="absolute top-40 left-20 w-48 h-48 bg-blue-500/5 rounded-full"></div>
+            <div className="absolute bottom-40 right-20 w-32 h-32 bg-blue-500/5 rounded-full"></div>
+          </div>
+          
+        <div className="w-full max-w-md space-y-6 z-10">
+          {/* Logo and Header */}
           <div className="text-center mb-8">
-            <div className="flex flex-col items-center gap-2 group">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                <Code className="w-6 h-6 text-primary" />
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-14 h-14 rounded-lg bg-blue-500/20 flex items-center justify-center hover:bg-blue-500/30 transition-colors">
+                <Code className="w-7 h-7 text-blue-400" />
               </div>
-              <h1 className="text-2xl font-bold mt-2">Welcome </h1>
-              <p className="text-base-content/60">Sign Up to your account</p>
+              <h1 className="text-2xl font-bold mt-3 text-white">Create Account</h1>
+              <p className="text-gray-300">Join our coding community</p>
             </div>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 backdrop-blur-sm bg-gray-800/30 border border-gray-700/50 rounded-xl p-6 shadow-lg">
             
             {/* name */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-medium">Name</span>
+                <span className="label-text font-medium text-gray-200">Name</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Code className="h-5 w-5 text-base-content/40" />
+                  <User className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   type="text"
                   {...register("name")}
-                  className={`input input-bordered w-full pl-10 ${
-                    errors.name ? "input-error" : ""
+                  className={`w-full bg-gray-900/50 border border-gray-700 rounded-lg py-2 px-4 pl-10 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors ${
+                    errors.name ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                   }`}
                   placeholder="John Doe"
                 />
               </div>
               {errors.name && (
-                <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+                <p className="text-red-400 text-sm mt-1.5 ml-1">{errors.name.message}</p>
               )}              
             </div>
 
             {/* Email */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-medium">Email</span>
+                <span className="label-text font-medium text-gray-200">Email</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-base-content/40" />
+                  <Mail className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   type="email"
                   {...register("email")}
-                  className={`input input-bordered w-full pl-10 ${
-                    errors.email ? "input-error" : ""
+                  className={`w-full bg-gray-900/50 border border-gray-700 rounded-lg py-2 px-4 pl-10 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors ${
+                    errors.email ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                   }`}
                   placeholder="you@example.com"
                 />
               </div>
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                <p className="text-red-400 text-sm mt-1.5 ml-1">{errors.email.message}</p>
               )}
             </div>
 
             {/* Password */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-medium">Password</span>
+                <span className="label-text font-medium text-gray-200">Password</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-base-content/40" />
+                  <Lock className="h-5 w-5 text-gray-400" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
-                  className={`input input-bordered w-full pl-10 ${
-                    errors.password ? "input-error" : ""
+                  className={`w-full bg-gray-900/50 border border-gray-700 rounded-lg py-2 px-4 pl-10 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors ${
+                    errors.password ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                   }`}
                   placeholder="••••••••"
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-200 transition-colors"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-base-content/40" />
+                    <EyeOff className="h-5 w-5" />
                   ) : (
-                    <Eye className="h-5 w-5 text-base-content/40" />
+                    <Eye className="h-5 w-5" />
                   )}
                 </button>
               </div>
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+                <p className="text-red-400 text-sm mt-1.5 ml-1">{errors.password.message}</p>
               )}
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
-              className="btn btn-primary w-full"
-             disabled={isSigninUp}
+              className="w-full mt-6 py-2.5 px-4 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
+              disabled={isSigninUp}
             >
                {isSigninUp ? (
                 <>
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                  Loading...
+                  <Loader2 className="h-5 w-5 animate-spin mr-2 inline" />
+                  Creating account...
                 </>
               ) : (
-                "Sign in"
+                "Create Account"
               )}
             </button>
           </form>
 
           {/* Footer */}
-          <div className="text-center">
-            <p className="text-base-content/60">
+          <div className="text-center mt-6">
+            <p className="text-gray-300">
               Already have an account?{" "}
-              <Link to="/login" className="link link-primary">
+              <Link to="/login" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
                 Sign in
               </Link>
             </p>
@@ -174,9 +181,9 @@ const SignUpPage = () => {
 
        {/* Right Side - Image/Pattern */}
       <AuthImagePattern
-        title={"Welcome to our platform!"}
+        title={"Join CodeStash today!"}
         subtitle={
-          "Sign up to access our platform and start using our services."
+          "Create an account to access our platform and start solving coding problems."
         }
       />
     </div>
