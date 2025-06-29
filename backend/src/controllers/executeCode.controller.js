@@ -111,8 +111,26 @@ export const executeCode = async (req, res) => {
           problemId,
         },
       });
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      await db.dailyStreak.upsert({
+        where: {
+          userId_date: {
+            userId,
+            date: today,
+          },
+        },
+        update: {
+          count: { increment: 1 },
+        },
+        create: {
+          userId,
+          date: today,
+        },
+      });
     }
-    await updateUserStreak(userId);
+
     //  save for individual test cases using detailresults
     const testCaseResults = detailedResults.map((result) => ({
       submissionId: submission.id,
