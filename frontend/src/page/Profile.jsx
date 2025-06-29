@@ -5,6 +5,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import ProfileSubmission from "../components/ProfileSubmission";
 import ProblemSolvedByUser from "../components/ProblemSolvedByUser";
 import PlaylistProfile from "../components/PlaylistProfile";
+import StreakCalendar from "../components/StreakCalendar"
 
 const Profile = () => {
   const { authUser } = useAuthStore();
@@ -130,6 +131,15 @@ const Profile = () => {
                 <button className="btn bg-blue-500 hover:bg-blue-600 border-0 text-white btn-sm">Change Password</button>
               </div>
             </div>
+          </div>
+          
+          {/* Streak Calendar Card */}
+          <div className="bg-gray-800 rounded-lg shadow-lg shadow-purple-500/10 border border-gray-700/20 p-4">
+            <div className="flex items-center mb-4">
+              <h2 className="text-xl font-bold text-white">Coding Streak</h2>
+              <div className="ml-2 badge badge-accent">Activity</div>
+            </div>
+            <StreakCalendar />
           </div>
           
           {/* Tabs for sections */}
