@@ -51,33 +51,6 @@ const Profile = () => {
               
               <div className="divider my-4 border-gray-700"></div>
               
-              {/* Stats Overview */}
-              <div className="grid grid-cols-3 gap-4 my-4">
-                <div className="flex flex-col items-center p-4 bg-gray-900/50 rounded-lg shadow-md border border-gray-700/30">
-                  <div className="mb-2">
-                    <Trophy className="w-8 h-8 text-yellow-400" />
-                  </div>
-                  <div className="text-2xl font-bold text-white">{authUser.problemsSolved?.length || 0}</div>
-                  <div className="text-xs mt-1 text-gray-400">Problems Solved</div>
-                </div>
-                
-                <div className="flex flex-col items-center p-4 bg-gray-900/50 rounded-lg shadow-md border border-gray-700/30">
-                  <div className="mb-2">
-                    <Zap className="w-8 h-8 text-green-400" />
-                  </div>
-                  <div className="text-2xl font-bold text-white">{authUser.submissions?.length || 0}</div>
-                  <div className="text-xs mt-1 text-gray-400">Submissions</div>
-                </div>
-                
-                <div className="flex flex-col items-center p-4 bg-gray-900/50 rounded-lg shadow-md border border-gray-700/30">
-                  <div className="mb-2">
-                    <Star className="w-8 h-8 text-purple-400" />
-                  </div>
-                  <div className="text-2xl font-bold text-white">{authUser.playlists?.length || 0}</div>
-                  <div className="text-xs mt-1 text-gray-400">Playlists</div>
-                </div>
-              </div>
-              
               {/* User Information */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Email */}
@@ -133,13 +106,59 @@ const Profile = () => {
             </div>
           </div>
           
-          {/* Streak Calendar Card */}
-          <div className="bg-gray-800 rounded-lg shadow-lg shadow-purple-500/10 border border-gray-700/20 p-4">
-            <div className="flex items-center mb-4">
-              <h2 className="text-xl font-bold text-white">Coding Streak</h2>
-              <div className="ml-2 badge badge-accent">Activity</div>
+          {/* Stats and Streak Calendar in a grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Stats Overview Card */}
+            <div className="bg-gray-800 rounded-lg shadow-lg shadow-purple-500/10 border border-gray-700/20 p-4">
+              <div className="flex items-center mb-4">
+                <h2 className="text-xl font-bold text-white">Stats Overview</h2>
+                <div className="ml-2 badge badge-secondary">Summary</div>
+              </div>
+              <div className="grid grid-cols-1 gap-4">
+                <div className="flex items-center p-4 bg-gray-900/50 rounded-lg shadow-md border border-gray-700/30">
+                  <div className="bg-blue-500/10 p-3 rounded-full mr-4">
+                    <Trophy className="w-8 h-8 text-yellow-400" />
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-white">{authUser.problemsSolved?.length || 0}</div>
+                    <div className="text-sm text-gray-400">Problems Solved</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center p-4 bg-gray-900/50 rounded-lg shadow-md border border-gray-700/30">
+                  <div className="bg-green-500/10 p-3 rounded-full mr-4">
+                    <Zap className="w-8 h-8 text-green-400" />
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-white">{authUser.submissions?.length || 0}</div>
+                    <div className="text-sm text-gray-400">Submissions</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center p-4 bg-gray-900/50 rounded-lg shadow-md border border-gray-700/30">
+                  <div className="bg-purple-500/10 p-3 rounded-full mr-4">
+                    <Star className="w-8 h-8 text-purple-400" />
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-white">{authUser.playlists?.length || 0}</div>
+                    <div className="text-sm text-gray-400">Playlists</div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <StreakCalendar />
+            
+            {/* Streak Calendar Card */}
+            <div className="bg-gray-800 rounded-lg shadow-lg shadow-purple-500/10 border border-gray-700/20 p-4">
+              <div className="flex items-center mb-4">
+                <h2 className="text-xl font-bold text-white">Coding Streak</h2>
+                <div className="ml-2 badge badge-accent">Activity</div>
+              </div>
+              <div className="flex justify-center items-center h-full py-2 pb-10">
+                <div className="max-w-md w-full">
+                  <StreakCalendar />
+                </div>
+              </div>
+            </div>
           </div>
           
           {/* Tabs for sections */}
