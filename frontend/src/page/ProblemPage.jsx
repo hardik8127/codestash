@@ -23,6 +23,7 @@ import { useExecutionStore } from "../store/useExecutionStore";
 import { useSubmissionStore } from "../store/useSubmissionStore";
 import Submission from "../components/Submission";
 import SubmissionsList from "../components/SubmissionList";
+import DiscussionList from "../components/DiscussionList";
 
 const ProblemPage = () => {
   const { id } = useParams();
@@ -64,6 +65,21 @@ const ProblemPage = () => {
   }, [problem, selectedLanguage]);
 
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Add keyboard shortcut: Ctrl+Enter to run code
+      if (e.ctrlKey && e.key === "Enter") {
+        handleRunCode(e);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [problem, selectedLanguage]);
+
+  useEffect(() => {
     if (activeTab === "submissions" && id) {
       getSubmissionForProblem(id);
     }
@@ -78,7 +94,12 @@ const ProblemPage = () => {
   };
 
   const handleRunCode = (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
+    
+    if (isExecuting) return;
+    
     try {
       const language_id = getLanguageId(selectedLanguage);
       const stdin = problem.testcases.map((tc) => tc.input);
@@ -177,13 +198,7 @@ const ProblemPage = () => {
         );
       case "discussion":
         return (
-          <div className="p-4 text-center text-gray-400 py-8">
-            <MessageSquare className="w-12 h-12 mx-auto text-gray-600 mb-4" />
-            <p className="text-lg text-gray-300">No discussions yet</p>
-            <p className="text-sm mt-2">
-              Be the first to start a discussion about this problem
-            </p>
-          </div>
+          <DiscussionList problemId={id} />
         );
       case "hints":
         return (
@@ -244,7 +259,7 @@ const ProblemPage = () => {
             </div>
           </div>
         </div>
-        <div className="flex-none gap-4">
+        <div className="flex-none gap-3 flex items-center">
           <button
             className={`btn btn-ghost btn-circle ${
               isBookmarked ? "text-blue-400" : "text-gray-300"
@@ -257,6 +272,7 @@ const ProblemPage = () => {
           <button className="btn btn-ghost btn-circle text-gray-300 hover:bg-gray-800 transition-colors" title="Share this problem">
             <Share2 className="w-5 h-5" />
           </button>
+          <div className="border-r border-gray-700 h-8 mx-1"></div>
           <select
             className="select select-bordered select-sm border border-gray-700 bg-gray-800/70 text-white w-40 font-medium focus:border-blue-500"
             value={selectedLanguage}
@@ -268,6 +284,20 @@ const ProblemPage = () => {
               </option>
             ))}
           </select>
+          <button
+            className={`btn btn-sm gap-2 bg-blue-500 hover:bg-blue-600 text-white border-none ${
+              isExecuting ? "loading" : ""
+            }`}
+            onClick={handleRunCode}
+            disabled={isExecuting}
+          >
+            {!isExecuting && <Play className="w-4 h-4" />}
+            Run
+          </button>
+          <button className="btn btn-sm gap-2 bg-green-500 hover:bg-green-600 text-white border-none">
+            <ChevronRight className="w-4 h-4" />
+            Submit
+          </button>
         </div>
       </nav>
 
@@ -357,22 +387,18 @@ const ProblemPage = () => {
                 />
               </div>
 
-              <div className="p-4 border-t border-gray-700/50 bg-gray-800/50 w-full">
+              <div className="p-3 border-t border-gray-700/50 bg-gray-800/50 w-full">
                 <div className="flex justify-between items-center w-full">
-                  <button
-                    className={`btn gap-2 bg-blue-500 hover:bg-blue-600 text-white border-none ${
-                      isExecuting ? "loading" : ""
-                    }`}
-                    onClick={handleRunCode}
-                    disabled={isExecuting}
-                  >
-                    {!isExecuting && <Play className="w-4 h-4" />}
-                    Run Code
-                  </button>
-                  <button className="btn gap-2 bg-green-500 hover:bg-green-600 text-white border-none">
-                    <ChevronRight className="w-4 h-4" />
-                    Submit Solution
-                  </button>
+                  <div className="text-gray-400 text-xs flex items-center gap-2">
+                    <span className="bg-gray-700 px-2 py-1 rounded font-mono">
+                      {selectedLanguage.charAt(0).toUpperCase() + selectedLanguage.slice(1)}
+                    </span>
+                    <span>|</span>
+                    <span>Use <kbd className="px-2 py-0.5 bg-gray-700 rounded text-xs">Ctrl+Enter</kbd> to run code</span>
+                  </div>
+                  <div className="text-gray-400 text-xs">
+                    {isExecuting && "Running..."}
+                  </div>
                 </div>
               </div>
             </div>
