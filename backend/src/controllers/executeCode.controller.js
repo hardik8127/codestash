@@ -113,7 +113,7 @@ export const executeCode = async (req, res) => {
 
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      await db.dailyStreak.upsert({
+      await db.userStreak.upsert({
         where: {
           userId_date: {
             userId,
