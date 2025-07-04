@@ -213,6 +213,30 @@ exports.Prisma.UserStreakScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.DiscussionScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  problemId: 'problemId'
+};
+
+exports.Prisma.CommentScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  discussionId: 'discussionId'
+};
+
+exports.Prisma.LikeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  discussionId: 'discussionId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -256,7 +280,10 @@ exports.Prisma.ModelName = {
   ProblemSolved: 'ProblemSolved',
   Playlist: 'Playlist',
   ProblemsInPlaylist: 'ProblemsInPlaylist',
-  UserStreak: 'UserStreak'
+  UserStreak: 'UserStreak',
+  Discussion: 'Discussion',
+  Comment: 'Comment',
+  Like: 'Like'
 };
 
 /**
