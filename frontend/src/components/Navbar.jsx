@@ -12,8 +12,8 @@ const Navbar = () => {
     console.log("AUTH_USER", authUser);
     
     return (
-     <nav className="sticky top-0 z-50 w-full py-5 bg-gray-900">
-      <div className="flex w-full justify-between mx-auto max-w-5xl shadow-lg shadow-purple-500/10 bg-gray-800/50 backdrop-blur-lg border border-gray-700/20 p-4 rounded-2xl">
+     <nav className="sticky top-0 z-50 w-full py-5 bg-[#060606]">
+      <div className="flex w-full justify-between mx-auto max-w-5xl shadow-lg bg-gray-800/50 backdrop-blur-lg border border-gray-700/20 p-4 rounded-2xl">
         {/* Logo Section */}
         <div className="flex items-center">
           <Link to={authUser ? "/home" : "/"} className="flex items-center gap-3 cursor-pointer">
@@ -116,7 +116,7 @@ const Navbar = () => {
                     to="/profile"
                     className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-700 transition-colors"
                   >
-                    <User className="w-4 h-4 text-purple-400" />
+                    <User className="w-4 h-4 text-blue-400" />
                     <span>My Profile</span>
                   </Link>
                 </li>

@@ -3,7 +3,7 @@ import Navbar from '../components/Navbar'
 
 const LandingLayout = ({ children }) => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black overflow-x-hidden">
+    <div className="min-h-screen bg-[#060606] overflow-x-hidden">
       <Navbar/>
       {children}
     </div>
