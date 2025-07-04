@@ -1,6 +1,6 @@
 import { addCommentToDiscussion, createDiscussion, getAllDiscussions, getDiscussionById, toggleLikeOnDiscussion } from "../controllers/discussion.controller.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
-import { Router  } from "module";
+import { Router  } from "express";
 
 const discussionRouter = Router();
 
