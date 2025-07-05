@@ -46,28 +46,29 @@ const LoginPage = () => {
 
 
   return (
-    <div className='h-screen grid lg:grid-cols-2'>
-        <div className="flex flex-col justify-center items-center p-6 sm:p-12 bg-gray-900 relative">
+    <div className='min-h-screen flex justify-center items-center bg-[#060606] text-white'>
+        <div className="flex flex-col justify-center items-center p-6 sm:p-12 relative w-full max-w-lg">
           {/* Background effects */}
           <div className="absolute inset-0 z-0 opacity-60">
-            <div className="absolute top-40 right-20 w-48 h-48 bg-purple-500/5 rounded-full"></div>
-            <div className="absolute bottom-40 left-20 w-32 h-32 bg-purple-500/5 rounded-full"></div>
+            <div className="absolute top-40 right-20 w-48 h-48 bg-blue-500/5 rounded-full blur-xl"></div>
+            <div className="absolute bottom-40 left-20 w-32 h-32 bg-blue-500/5 rounded-full blur-xl"></div>
+            <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-blue-600/5 rounded-full blur-xl"></div>
           </div>
           
         <div className="w-full max-w-md space-y-6 z-10">
           {/* Logo and Header */}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2">
-              <div className="w-14 h-14 rounded-lg bg-purple-500/20 flex items-center justify-center hover:bg-purple-500/30 transition-colors">
-                <Code className="w-7 h-7 text-purple-400" />
+              <div className="w-14 h-14 rounded-lg bg-blue-500/20 flex items-center justify-center hover:bg-blue-500/30 transition-colors">
+                <Code className="w-7 h-7 text-blue-400" />
               </div>
-              <h1 className="text-2xl font-bold mt-3 text-white">Welcome Back</h1>
+              <h1 className="text-3xl font-bold mt-3 text-white">Welcome Back</h1>
               <p className="text-gray-300">Sign in to your account</p>
             </div>
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 backdrop-blur-sm bg-gray-800/30 border border-gray-700/50 rounded-xl p-6 shadow-lg">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 backdrop-blur-sm bg-[#0a0a0a]/80 border border-gray-800 rounded-xl p-8 shadow-lg">
             {/* Email */}
             <div className="form-control">
               <label className="label">
@@ -80,7 +81,7 @@ const LoginPage = () => {
                 <input
                   type="email"
                   {...register("email")}
-                  className={`w-full bg-gray-900/50 border border-gray-700 rounded-lg py-2 px-4 pl-10 text-white focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none transition-colors ${
+                  className={`w-full bg-[#121212] border border-gray-800 rounded-lg py-3 px-4 pl-10 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors ${
                     errors.email ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                   }`}
                   placeholder="you@example.com"
@@ -103,7 +104,7 @@ const LoginPage = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
-                  className={`w-full bg-gray-900/50 border border-gray-700 rounded-lg py-2 px-4 pl-10 text-white focus:border-purple-500 focus:ring-1 focus:ring-purple-500 outline-none transition-colors ${
+                  className={`w-full bg-[#121212] border border-gray-800 rounded-lg py-3 px-4 pl-10 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors ${
                     errors.password ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                   }`}
                   placeholder="••••••••"
@@ -128,7 +129,7 @@ const LoginPage = () => {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full mt-6 py-2.5 px-4 bg-purple-600 text-white font-medium rounded-lg hover:bg-purple-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-50 shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
+              className="w-full mt-6 py-3 px-4 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
               disabled={isLoggingIn}
             >
                {isLoggingIn ? (
@@ -146,21 +147,13 @@ const LoginPage = () => {
           <div className="text-center mt-6">
             <p className="text-gray-300">
               Don't have an account?{" "}
-              <Link to="/signup" className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+              <Link to="/signup" className="text-blue-400 hover:text-blue-300 font-medium transition-colors">
                 Create Account
               </Link>
             </p>
           </div>
         </div>
       </div>
-
-      {/* Right Side - Image/Pattern */}
-      <AuthImagePattern
-        title={"Welcome back to CodeStash!"}
-        subtitle={
-          "Sign in to continue your coding journey and track your progress."
-        }
-      />
     </div>
   )
 }
