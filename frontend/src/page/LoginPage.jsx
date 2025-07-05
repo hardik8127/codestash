@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Code,
   Eye,
@@ -26,6 +26,7 @@ const LoginPage = () => {
 
   const {isLoggingIn , login} = useAuthStore()
   const [showPassword , setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const {
     register ,
@@ -37,10 +38,12 @@ const LoginPage = () => {
 
   const onSubmit = async (data)=>{
     try {
-      await login(data)
+      const response = await login(data)
+      console.log("Login successful:", response)
+      navigate('/home')
       
     } catch (error) {
-      console.error("Signup failed" , error)
+      console.error("Login failed" , error)
     }
   }
 
