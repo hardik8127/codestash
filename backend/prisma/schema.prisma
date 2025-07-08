@@ -20,18 +20,22 @@ enum Difficulty {
 }
 
 model User {
-  id            String          @id @default(uuid())
-  name          String?
-  email         String          @unique
-  image         String?
-  role          UserRole        @default(USER)
-  password      String
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @default(now())
-  Problems      Problem[]
-  submission    Submission[]
-  solvedProblem ProblemSolved[]
-  playlist      Playlist[]
+  id                   String          @id @default(uuid())
+  name                 String?
+  email                String          @unique
+  image                String?
+  role                 UserRole        @default(USER)
+  password             String
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @default(now())
+  isVerified           Boolean         @default(false)
+  verificationToken    String?
+  resetPasswordToken   String?
+  resetPasswordExpires DateTime?
+  Problems             Problem[]
+  submission           Submission[]
+  solvedProblem        ProblemSolved[]
+  playlist             Playlist[]
 
   userStreak UserStreak[]
 
@@ -132,7 +136,7 @@ model Playlist {
   updatedAt   DateTime @updatedAt
 
   problems ProblemsInPlaylist[]
-  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([name, userId])
 }
