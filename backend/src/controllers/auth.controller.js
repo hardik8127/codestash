@@ -3,7 +3,7 @@ import { db } from "../libs/db.js";
 import { UserRole } from "../generated/prisma/index.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
-import nodemailer from "nodemailer";
+import { sendVerificationEmail, sendPasswordResetEmail } from "../libs/email.js";
 import { OAuth2Client } from "google-auth-library";
 
 // Initialize Google OAuth client
@@ -38,33 +38,13 @@ export const register = async (req, res) => {
       },
     });
 
-    const transporter = nodemailer.createTransport({
-      host: process.env.MAILTRAP_HOST,
-      port: 587,
-      secure: false, // true for port 465, false for other ports
-      auth: {
-        user: process.env.MAILTRAP_USERNAME,
-        pass: process.env.MAILTRAP_PASSWORD,
-      },
-    });
-
-    const mailOptions = {
-      from: process.env.MAILTRAP_SENDEREMAIL,
-      to: newUser.email, // Changed from user.email to newUser.email
-      subject: "Verify your email",
-      text: `Please click on the link: ${process.env.BASE_URL}/api/v1/auth/verify/${verificationToken}`, // Changed token to verificationToken and users to auth
-    };
-    await transporter.sendMail(mailOptions);
-    // const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
-    //   expiresIn: "7d",
-    // });
-
-    // res.cookie("jwt", token, {
-    //   httpOnly: true,
-    //   sameSite: "strict",
-    //   secure: process.env.NODE_ENV !== "development",
-    //   maxAge: 1000 * 60 * 60 * 24 * 7,
-    // });
+    // Send verification email
+    try {
+      await sendVerificationEmail(newUser.email, verificationToken);
+    } catch (emailError) {
+      console.error("Error sending verification email:", emailError);
+      // Don't fail registration if email sending fails
+    }
 
     res.status(201).json({
       message: "User Created Successfully",
@@ -258,24 +238,16 @@ export const forgotPassword = async (req, res) => {
       },
     });
 
-    const transporter = nodemailer.createTransport({
-      host: process.env.MAILTRAP_HOST,
-      port: 587,
-      secure: false, // true for port 465, false for other ports
-      auth: {
-        user: process.env.MAILTRAP_USERNAME,
-        pass: process.env.MAILTRAP_PASSWORD,
-      },
-    });
-
-    const mailOptions = {
-      from: process.env.MAILTRAP_SENDEREMAIL,
-      to: user.email,
-      subject: "Reset your Password",
-      text: `Please click on the link to reset your password: ${process.env.FRONTEND_URL}/reset/${resetPassToken}`,
-    };
-
-    await transporter.sendMail(mailOptions);
+    // Send password reset email
+    try {
+      await sendPasswordResetEmail(user.email, resetPassToken);
+    } catch (emailError) {
+      console.error("Error sending password reset email:", emailError);
+      return res.status(500).json({
+        message: "Error sending password reset email",
+        success: false,
+      });
+    }
 
     res.status(200).json({
       message: "Password reset email sent successfully",
