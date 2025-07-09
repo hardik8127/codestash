@@ -1,0 +1,30 @@
+import { db } from "../libs/db.js";
+
+export const getStreakHeatmap = async (req, res) => {
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(400).json({
+        message: "Error Occured",
+      });
+    }
+
+    // Get all streak entries
+    const streaks = await db.userStreak.findMany({
+      where: { userId },
+      orderBy: { date: "asc" },
+    });
+
+    // Format them like GitHub-style graph: [{ date, count }]
+    const result = streaks.map((streak) => ({
+      date: streak.date.toISOString().split("T")[0], // "YYYY-MM-DD"
+      count: streak.count,
+    }));
+
+    return res.status(200).json({ message: "Streak heatmap data", result });
+  } catch (error) {
+    console.error("Error fetching heatmap data:", error);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+};

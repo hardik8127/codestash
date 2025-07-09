@@ -20,18 +20,31 @@ enum Difficulty {
 }
 
 model User {
-  id            String          @id @default(uuid())
-  name          String?
-  email         String          @unique
-  image         String?
-  role          UserRole        @default(USER)
-  password      String
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @default(now())
-  Problems      Problem[]
-  submission    Submission[]
-  solvedProblem ProblemSolved[]
-  playlist      Playlist[]
+  id                   String          @id @default(uuid())
+  name                 String?
+  email                String          @unique
+  image                String?
+  role                 UserRole        @default(USER)
+  password             String
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @default(now())
+  isVerified           Boolean         @default(false)
+  verificationToken    String?
+  resetPasswordToken   String?
+  resetPasswordExpires DateTime?
+  googleId             String?         @unique
+  Problems             Problem[]
+  submission           Submission[]
+  solvedProblem        ProblemSolved[]
+  playlist             Playlist[]
+
+  userStreak UserStreak[]
+
+  discussion Discussion[]
+
+  comment Comment[]
+
+  like Like[]
 }
 
 model Problem {
@@ -56,6 +69,8 @@ model Problem {
   submission       Submission[]
   solvedBy         ProblemSolved[]
   problemsPlaylist ProblemsInPlaylist[]
+
+  discussion Discussion[]
 }
 
 model Submission {
@@ -138,4 +153,57 @@ model ProblemsInPlaylist {
   problem  Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
   @@unique([playListId, problemId])
+}
+
+model UserStreak {
+  id        String   @id @default(uuid())
+  userId    String
+  date      DateTime @db.Date
+  count     Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
+
+model Discussion {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  problem   Problem @relation(fields: [problemId], references: [id])
+  problemId String
+
+  comments Comment[]
+  likes    Like[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  discussion   Discussion @relation(fields: [discussionId], references: [id])
+  discussionId String
+}
+
+model Like {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  discussion   Discussion @relation(fields: [discussionId], references: [id])
+  discussionId String
+
+  @@unique([userId, discussionId]) // Prevent duplicate likes
 }

@@ -125,7 +125,12 @@ exports.Prisma.UserScalarFieldEnum = {
   role: 'role',
   password: 'password',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  isVerified: 'isVerified',
+  verificationToken: 'verificationToken',
+  resetPasswordToken: 'resetPasswordToken',
+  resetPasswordExpires: 'resetPasswordExpires',
+  googleId: 'googleId'
 };
 
 exports.Prisma.ProblemScalarFieldEnum = {
@@ -204,6 +209,39 @@ exports.Prisma.ProblemsInPlaylistScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.UserStreakScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  date: 'date',
+  count: 'count',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DiscussionScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  userId: 'userId',
+  problemId: 'problemId'
+};
+
+exports.Prisma.CommentScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  createdAt: 'createdAt',
+  userId: 'userId',
+  discussionId: 'discussionId'
+};
+
+exports.Prisma.LikeScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  discussionId: 'discussionId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -246,7 +284,11 @@ exports.Prisma.ModelName = {
   TestCaseResults: 'TestCaseResults',
   ProblemSolved: 'ProblemSolved',
   Playlist: 'Playlist',
-  ProblemsInPlaylist: 'ProblemsInPlaylist'
+  ProblemsInPlaylist: 'ProblemsInPlaylist',
+  UserStreak: 'UserStreak',
+  Discussion: 'Discussion',
+  Comment: 'Comment',
+  Like: 'Like'
 };
 
 /**

@@ -1,12 +1,12 @@
 import React, { useState, useMemo } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
-import { Bookmark, PencilIcon, Trash, TrashIcon, Plus } from "lucide-react";
+import { Bookmark, PencilIcon, Trash, TrashIcon, Plus, CheckCircle, Circle } from "lucide-react";
 import { useActions } from "../store/useAction";
 import AddToPlaylistModal from "./AddToPlaylist";
 import CreatePlaylistModal from "./CreatePlaylistModal";
 import { usePlaylistStore } from "../store/usePlaylistStore";
-
+import { motion } from "framer-motion";
 
 const ProblemsTable = ({ problems }) => {
   const { authUser } = useAuthStore();
@@ -19,6 +19,25 @@ const ProblemsTable = ({ problems }) => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] = useState(false);
   const [selectedProblemId, setSelectedProblemId] = useState(null);
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.4,
+        when: "beforeChildren",
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } }
+  };
 
   // Extract all unique tags from problems
   const allTags = useMemo(() => {
@@ -69,170 +88,213 @@ const ProblemsTable = ({ problems }) => {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto mt-10">
-      {/* Header with Create Playlist Button */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Problems</h2>
-        <button
-          className="btn btn-primary gap-2"
-          onClick={() => setIsCreateModalOpen(true)}
-        >
-          <Plus className="w-4 h-4" />
-          Create Playlist
-        </button>
-      </div>
+    <motion.div 
+      className="w-full max-w-5xl mx-auto"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+    >
+      {/* Header Section */}
+      <motion.div 
+        className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/30 rounded-t-xl p-6 shadow-lg"
+        variants={itemVariants}
+      >
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-4">
+            <h2 className="text-2xl font-bold text-white">Problems</h2>
+            <div className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm font-medium border border-blue-500/30">
+              {filteredProblems.length} available
+            </div>
+          </div>
+          <motion.button
+            className="px-6 py-2 bg-blue-600 rounded-md font-medium text-white flex items-center gap-2 hover:bg-blue-700 transition-all"
+            onClick={() => setIsCreateModalOpen(true)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Plus className="w-4 h-4" />
+            Create Playlist
+          </motion.button>
+        </div>
 
-      {/* Filters */}
-      <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
-        <input
-          type="text"
-          placeholder="Search by title"
-          className="input input-bordered w-full md:w-1/3 bg-base-200"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <select
-          className="select select-bordered bg-base-200"
-          value={difficulty}
-          onChange={(e) => setDifficulty(e.target.value)}
-        >
-          <option value="ALL">All Difficulties</option>
-          {difficulties.map((diff) => (
-            <option key={diff} value={diff}>
-              {diff.charAt(0).toUpperCase() + diff.slice(1).toLowerCase()}
-            </option>
-          ))}
-        </select>
-        <select
-          className="select select-bordered bg-base-200"
-          value={selectedTag}
-          onChange={(e) => setSelectedTag(e.target.value)}
-        >
-          <option value="ALL">All Tags</option>
-          {allTags.map((tag) => (
-            <option key={tag} value={tag}>
-              {tag}
-            </option>
-          ))}
-        </select>
-      </div>
+        {/* Filters */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <input
+            type="text"
+            placeholder="Search by title..."
+            className="px-4 py-2 bg-gray-900/50 border border-gray-700/30 rounded-md text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <select
+            className="px-4 py-2 bg-gray-900/50 border border-gray-700/30 rounded-md text-white focus:outline-none focus:border-blue-500 transition-colors"
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
+          >
+            <option value="ALL">All Difficulties</option>
+            {difficulties.map((diff) => (
+              <option key={diff} value={diff}>
+                {diff.charAt(0).toUpperCase() + diff.slice(1).toLowerCase()}
+              </option>
+            ))}
+          </select>
+          <select
+            className="px-4 py-2 bg-gray-900/50 border border-gray-700/30 rounded-md text-white focus:outline-none focus:border-blue-500 transition-colors"
+            value={selectedTag}
+            onChange={(e) => setSelectedTag(e.target.value)}
+          >
+            <option value="ALL">All Tags</option>
+            {allTags.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
+        </div>
+      </motion.div>
 
       {/* Table */}
-      <div className="overflow-x-auto rounded-xl shadow-md">
-        <table className="table table-zebra table-lg bg-base-200 text-base-content">
-          <thead className="bg-base-300">
-            <tr>
-              <th>Solved</th>
-              <th>Title</th>
-              <th>Tags</th>
-              <th>Difficulty</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedProblems.length > 0 ? (
-              paginatedProblems.map((problem) => {
-                const isSolved = problem.solvedBy.some(
-                  (user) => user.userId === authUser?.id
-                );
-                return (
-                  <tr key={problem.id}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={isSolved}
-                        readOnly
-                        className="checkbox checkbox-sm"
-                      />
-                    </td>
-                    <td>
-                      <Link to={`/problem/${problem.id}`} className="font-semibold hover:underline">
-                        {problem.title}
-                      </Link>
-                    </td>
-                    <td>
-                      <div className="flex flex-wrap gap-1">
-                        {(problem.tags || []).map((tag, idx) => (
-                          <span
-                            key={idx}
-                            className="badge badge-outline badge-warning text-xs font-bold"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </td>
-                    <td>
-                      <span
-                        className={`badge font-semibold text-xs text-white ${
-                          problem.difficulty === "EASY"
-                            ? "badge-success"
-                            : problem.difficulty === "MEDIUM"
-                            ? "badge-warning"
-                            : "badge-error"
-                        }`}
-                      >
-                        {problem.difficulty}
-                      </span>
-                    </td>
-                    <td>
-                      <div className="flex flex-col md:flex-row gap-2 items-start md:items-center">
-                        {authUser?.role === "ADMIN" && (
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => handleDelete(problem.id)}
-                              className="btn btn-sm btn-error"
-                            >
-                              <TrashIcon className="w-4 h-4 text-white" />
-                            </button>
-                            <button disabled className="btn btn-sm btn-warning">
-                              <PencilIcon className="w-4 h-4 text-white" />
-                            </button>
-                          </div>
-                        )}
-                        <button
-                          className="btn btn-sm btn-outline flex gap-2 items-center"
-                          onClick={() => handleAddToPlaylist(problem.id)}
-                        >
-                          <Bookmark className="w-4 h-4" />
-                          <span className="hidden sm:inline">Save to Playlist</span>
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })
-            ) : (
+      <motion.div 
+        className="bg-gray-800/30 backdrop-blur-sm border-x border-b border-gray-700/30 rounded-b-xl overflow-hidden shadow-lg"
+        variants={itemVariants}
+      >
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-900/50 border-b border-gray-700/30">
               <tr>
-                <td colSpan={5} className="text-center py-6 text-gray-500">
-                  No problems found.
-                </td>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Status</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Title</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300 hidden md:table-cell">Tags</th>
+                <th className="px-6 py-4 text-center text-sm font-semibold text-gray-300">Difficulty</th>
+                <th className="px-6 py-4 text-center text-sm font-semibold text-gray-300">Actions</th>
               </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {paginatedProblems.length > 0 ? (
+                paginatedProblems.map((problem) => {
+                  const isSolved = problem.solvedBy.some(
+                    (user) => user.userId === authUser?.id
+                  );
+                  return (
+                    <motion.tr 
+                      key={problem.id} 
+                      className="border-b border-gray-700/50 hover:bg-gray-700/30 transition-colors"
+                      variants={itemVariants}
+                    >
+                      <td className="px-6 py-4">
+                        <div className="flex items-center justify-center w-6 h-6">
+                          {isSolved ? (
+                            <CheckCircle className="w-5 h-5 text-blue-400" />
+                          ) : (
+                            <Circle className="w-5 h-5 text-gray-500" />
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <Link to={`/problem/${problem.id}`} className="font-semibold text-white hover:text-blue-400 transition-colors">
+                          {problem.title}
+                        </Link>
+                      </td>
+                      <td className="px-6 py-4 hidden md:table-cell">
+                        <div className="flex flex-wrap gap-1">
+                          {(problem.tags || []).map((tag, idx) => (
+                            <span
+                              key={idx}
+                              className="px-2 py-1 bg-gray-700/50 text-gray-300 text-xs rounded border border-gray-700/50"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                            problem.difficulty === "EASY"
+                              ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                              : problem.difficulty === "MEDIUM"
+                              ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
+                              : "bg-red-500/20 text-red-400 border border-red-500/30"
+                          }`}
+                        >
+                          {problem.difficulty}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex justify-center gap-2">
+                          {authUser?.role === "ADMIN" && (
+                            <div className="flex gap-2">
+                              <button
+                                onClick={() => handleDelete(problem.id)}
+                                className="p-2 bg-red-500/20 text-red-400 rounded border border-red-500/30 hover:bg-red-500/30 transition-colors"
+                              >
+                                <TrashIcon className="w-4 h-4" />
+                              </button>
+                              <button className="p-2 bg-gray-500/20 text-gray-400 rounded border border-gray-500/30">
+                                <PencilIcon className="w-4 h-4" />
+                              </button>
+                            </div>
+                          )}
+                          <button
+                            className="p-2 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30 hover:bg-blue-500/30 transition-colors flex items-center gap-2"
+                            onClick={() => handleAddToPlaylist(problem.id)}
+                          >
+                            <Bookmark className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </motion.tr>
+                  );
+                })
+              ) : (
+                <tr>
+                  <td colSpan={5} className="px-6 py-12 text-center">
+                    <div className="flex flex-col items-center gap-3">
+                      <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center">
+                        <Code className="w-8 h-8 text-blue-400" />
+                      </div>
+                      <div>
+                        <p className="text-gray-300 font-medium">No problems found</p>
+                        <p className="text-gray-500 text-sm">Try adjusting your filters</p>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
 
-      {/* Pagination */}
-      <div className="flex justify-center mt-6 gap-2">
-        <button
-          className="btn btn-sm"
-          disabled={currentPage === 1}
-          onClick={() => setCurrentPage((prev) => prev - 1)}
-        >
-          Prev
-        </button>
-        <span className="btn btn-ghost btn-sm">
-          {currentPage} / {totalPages}
-        </span>
-        <button
-          className="btn btn-sm"
-          disabled={currentPage === totalPages}
-          onClick={() => setCurrentPage((prev) => prev + 1)}
-        >
-          Next
-        </button>
-      </div>
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-between items-center p-4 border-t border-gray-700/30 bg-gray-900/30">
+            <div className="text-sm text-gray-400">
+              Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+              {Math.min(currentPage * itemsPerPage, filteredProblems.length)} of{" "}
+              {filteredProblems.length} problems
+            </div>
+            <div className="flex gap-2">
+              <button
+                className="px-3 py-1 bg-gray-700/50 text-gray-300 rounded border border-gray-700/30 hover:bg-gray-600/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+              >
+                Prev
+              </button>
+              <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">
+                {currentPage} / {totalPages}
+              </span>
+              <button
+                className="px-3 py-1 bg-gray-700/50 text-gray-300 rounded border border-gray-700/30 hover:bg-gray-600/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
+      </motion.div>
 
       {/* Modals */}
       <CreatePlaylistModal
@@ -246,7 +308,7 @@ const ProblemsTable = ({ problems }) => {
         onClose={() => setIsAddToPlaylistModalOpen(false)}
         problemId={selectedProblemId}
       />
-    </div>
+    </motion.div>
   );
 };
 

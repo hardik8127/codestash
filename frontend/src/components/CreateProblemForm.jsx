@@ -11,6 +11,8 @@ import {
   BookOpen,
   CheckCircle2,
   Download,
+  Loader2,
+  Code,
 } from "lucide-react";
 import Editor from "@monaco-editor/react";
 import { useState } from "react";
@@ -590,30 +592,48 @@ const CreateProblemForm = () => {
   };
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-7xl">
-      <div className="card bg-base-100 shadow-xl">
-        <div className="card-body p-6 md:p-8">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 md:mb-8 pb-4 border-b">
-            <h2 className="card-title text-2xl md:text-3xl flex items-center gap-3">
-              <FileText className="w-6 h-6 md:w-8 md:h-8 text-primary" />
-              Create Problem
+    <div className="min-h-screen bg-[#060606] text-white py-10">
+      <div className="container mx-auto px-4 max-w-6xl">
+        {/* Header section with logo and title */}
+        <div className="text-center mb-8">
+          <div className="flex flex-col items-center gap-2">
+            <div className="w-14 h-14 rounded-lg bg-blue-500/20 flex items-center justify-center hover:bg-blue-500/30 transition-colors">
+              <Code className="w-7 h-7 text-blue-400" />
+            </div>
+            <h1 className="text-3xl font-bold mt-3 text-white">Create Problem</h1>
+            <p className="text-gray-300">Add a new coding challenge to the platform</p>
+          </div>
+        </div>
+
+        {/* Background effects */}
+        <div className="absolute inset-0 z-0 opacity-60 pointer-events-none">
+          <div className="absolute top-40 right-20 w-48 h-48 bg-blue-500/5 rounded-full blur-xl"></div>
+          <div className="absolute bottom-40 left-20 w-32 h-32 bg-blue-500/5 rounded-full blur-xl"></div>
+          <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-blue-600/5 rounded-full blur-xl"></div>
+        </div>
+
+        <div className="backdrop-blur-sm bg-[#0a0a0a]/80 border border-gray-800 rounded-xl shadow-lg p-6 md:p-8 relative z-10">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 pb-4 border-b border-gray-800">
+            <h2 className="text-xl md:text-2xl font-semibold flex items-center gap-3 text-white">
+              <FileText className="w-5 h-5 md:w-6 md:h-6 text-blue-400" />
+              Problem Details
             </h2>
 
             <div className="flex flex-col md:flex-row gap-3 mt-4 md:mt-0">
               <div className="join">
                 <button
                   type="button"
-                  className={`btn join-item ${
-                    sampleType === "DP" ? "btn-active" : ""
+                  className={`btn join-item bg-[#121212] border-gray-700 text-gray-200 hover:bg-[#1a1a1a] ${
+                    sampleType === "DP" ? "bg-blue-600 hover:bg-blue-700 text-white border-transparent" : ""
                   }`}
-                  onClick={() => setSampleType("array")}
+                  onClick={() => setSampleType("DP")}
                 >
                   DP Problem
                 </button>
                 <button
                   type="button"
-                  className={`btn join-item ${
-                    sampleType === "string" ? "btn-active" : ""
+                  className={`btn join-item bg-[#121212] border-gray-700 text-gray-200 hover:bg-[#1a1a1a] ${
+                    sampleType === "string" ? "bg-blue-600 hover:bg-blue-700 text-white border-transparent" : ""
                   }`}
                   onClick={() => setSampleType("string")}
                 >
@@ -622,7 +642,7 @@ const CreateProblemForm = () => {
               </div>
               <button
                 type="button"
-                className="btn btn-secondary gap-2"
+                className="btn bg-blue-600 hover:bg-blue-700 text-white border-transparent gap-2"
                 onClick={loadSampleData}
               >
                 <Download className="w-4 h-4" />
@@ -636,53 +656,45 @@ const CreateProblemForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="form-control md:col-span-2">
                 <label className="label">
-                  <span className="label-text text-base md:text-lg font-semibold">
-                    Title
-                  </span>
+                  <span className="label-text font-medium text-gray-200">Title</span>
                 </label>
                 <input
                   type="text"
-                  className="input input-bordered w-full text-base md:text-lg"
+                  className={`w-full bg-[#121212] border border-gray-800 rounded-lg py-3 px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors ${
+                    errors.title ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
+                  }`}
                   {...register("title")}
                   placeholder="Enter problem title"
                 />
                 {errors.title && (
-                  <label className="label">
-                    <span className="label-text-alt text-error">
-                      {errors.title.message}
-                    </span>
-                  </label>
+                  <p className="text-red-400 text-sm mt-1.5 ml-1">{errors.title.message}</p>
                 )}
               </div>
 
               <div className="form-control md:col-span-2">
                 <label className="label">
-                  <span className="label-text text-base md:text-lg font-semibold">
-                    Description
-                  </span>
+                  <span className="label-text font-medium text-gray-200">Description</span>
                 </label>
                 <textarea
-                  className="textarea textarea-bordered min-h-32 w-full text-base md:text-lg p-4 resize-y"
+                  className={`w-full bg-[#121212] border border-gray-800 rounded-lg py-3 px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-32 resize-y ${
+                    errors.description ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
+                  }`}
                   {...register("description")}
                   placeholder="Enter problem description"
                 />
                 {errors.description && (
-                  <label className="label">
-                    <span className="label-text-alt text-error">
-                      {errors.description.message}
-                    </span>
-                  </label>
+                  <p className="text-red-400 text-sm mt-1.5 ml-1">{errors.description.message}</p>
                 )}
               </div>
 
               <div className="form-control">
                 <label className="label">
-                  <span className="label-text text-base md:text-lg font-semibold">
-                    Difficulty
-                  </span>
+                  <span className="label-text font-medium text-gray-200">Difficulty</span>
                 </label>
                 <select
-                  className="select select-bordered w-full text-base md:text-lg"
+                  className={`w-full bg-[#121212] border border-gray-800 rounded-lg py-3 px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors ${
+                    errors.difficulty ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
+                  }`}
                   {...register("difficulty")}
                 >
                   <option value="EASY">Easy</option>
@@ -690,25 +702,21 @@ const CreateProblemForm = () => {
                   <option value="HARD">Hard</option>
                 </select>
                 {errors.difficulty && (
-                  <label className="label">
-                    <span className="label-text-alt text-error">
-                      {errors.difficulty.message}
-                    </span>
-                  </label>
+                  <p className="text-red-400 text-sm mt-1.5 ml-1">{errors.difficulty.message}</p>
                 )}
               </div>
             </div>
 
             {/* Tags */}
-            <div className="card bg-base-200 p-4 md:p-6 shadow-md">
+            <div className="bg-[#0f0f0f] border border-gray-800 rounded-lg p-5 shadow-md">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
-                  <BookOpen className="w-5 h-5" />
+                <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-100">
+                  <BookOpen className="w-5 h-5 text-blue-400" />
                   Tags
                 </h3>
                 <button
                   type="button"
-                  className="btn btn-primary btn-sm"
+                  className="btn btn-sm bg-blue-600 hover:bg-blue-700 text-white border-transparent"
                   onClick={() => appendTag("")}
                 >
                   <Plus className="w-4 h-4 mr-1" /> Add Tag
@@ -719,40 +727,40 @@ const CreateProblemForm = () => {
                   <div key={field.id} className="flex gap-2 items-center">
                     <input
                       type="text"
-                      className="input input-bordered flex-1"
+                      className={`w-full bg-[#121212] border border-gray-800 rounded-lg py-2 px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors ${
+                        errors.tags?.[index] ? "border-red-500" : ""
+                      }`}
                       {...register(`tags.${index}`)}
                       placeholder="Enter tag"
                     />
                     <button
                       type="button"
-                      className="btn btn-ghost btn-square btn-sm"
+                      className="btn btn-square btn-sm bg-[#121212] border border-gray-700 hover:bg-red-900/20 hover:border-red-800"
                       onClick={() => removeTag(index)}
                       disabled={tagFields.length === 1}
                     >
-                      <Trash2 className="w-4 h-4 text-error" />
+                      <Trash2 className="w-4 h-4 text-red-400" />
                     </button>
                   </div>
                 ))}
               </div>
               {errors.tags && (
                 <div className="mt-2">
-                  <span className="text-error text-sm">
-                    {errors.tags.message}
-                  </span>
+                  <span className="text-red-400 text-sm">{errors.tags.message}</span>
                 </div>
               )}
             </div>
 
             {/* Test Cases */}
-            <div className="card bg-base-200 p-4 md:p-6 shadow-md">
+            <div className="bg-[#0f0f0f] border border-gray-800 rounded-lg p-5 shadow-md">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg md:text-xl font-semibold flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5" />
+                <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-100">
+                  <CheckCircle2 className="w-5 h-5 text-blue-400" />
                   Test Cases
                 </h3>
                 <button
                   type="button"
-                  className="btn btn-primary btn-sm"
+                  className="btn btn-sm bg-blue-600 hover:bg-blue-700 text-white border-transparent"
                   onClick={() => appendTestCase({ input: "", output: "" })}
                 >
                   <Plus className="w-4 h-4 mr-1" /> Add Test Case
@@ -760,60 +768,48 @@ const CreateProblemForm = () => {
               </div>
               <div className="space-y-6">
                 {testCaseFields.map((field, index) => (
-                  <div key={field.id} className="card bg-base-100 shadow-md">
-                    <div className="card-body p-4 md:p-6">
-                      <div className="flex justify-between items-center mb-4">
-                        <h4 className="text-base md:text-lg font-semibold">
-                          Test Case #{index + 1}
-                        </h4>
-                        <button
-                          type="button"
-                          className="btn btn-ghost btn-sm text-error"
-                          onClick={() => removeTestCase(index)}
-                          disabled={testCaseFields.length === 1}
-                        >
-                          <Trash2 className="w-4 h-4 mr-1" /> Remove
-                        </button>
+                  <div key={field.id} className="bg-[#121212] border border-gray-800 rounded-lg shadow-md overflow-hidden">
+                    <div className="bg-[#0c0c0c] px-4 py-3 border-b border-gray-800 flex justify-between items-center">
+                      <h4 className="font-semibold text-gray-200">Test Case #{index + 1}</h4>
+                      <button
+                        type="button"
+                        className="btn btn-sm bg-transparent border-none hover:bg-red-900/20 text-red-400"
+                        onClick={() => removeTestCase(index)}
+                        disabled={testCaseFields.length === 1}
+                      >
+                        <Trash2 className="w-4 h-4 mr-1" /> Remove
+                      </button>
+                    </div>
+                    <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="form-control">
+                        <label className="label">
+                          <span className="label-text font-medium text-gray-300">Input</span>
+                        </label>
+                        <textarea
+                          className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 px-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-24 resize-y ${
+                            errors.testcases?.[index]?.input ? "border-red-500" : ""
+                          }`}
+                          {...register(`testcases.${index}.input`)}
+                          placeholder="Enter test case input"
+                        />
+                        {errors.testcases?.[index]?.input && (
+                          <p className="text-red-400 text-sm mt-1">{errors.testcases[index].input.message}</p>
+                        )}
                       </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                        <div className="form-control">
-                          <label className="label">
-                            <span className="label-text font-medium">
-                              Input
-                            </span>
-                          </label>
-                          <textarea
-                            className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
-                            {...register(`testcases.${index}.input`)}
-                            placeholder="Enter test case input"
-                          />
-                          {errors.testcases?.[index]?.input && (
-                            <label className="label">
-                              <span className="label-text-alt text-error">
-                                {errors.testcases[index].input.message}
-                              </span>
-                            </label>
-                          )}
-                        </div>
-                        <div className="form-control">
-                          <label className="label">
-                            <span className="label-text font-medium">
-                              Expected Output
-                            </span>
-                          </label>
-                          <textarea
-                            className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
-                            {...register(`testcases.${index}.output`)}
-                            placeholder="Enter expected output"
-                          />
-                          {errors.testcases?.[index]?.output && (
-                            <label className="label">
-                              <span className="label-text-alt text-error">
-                                {errors.testcases[index].output.message}
-                              </span>
-                            </label>
-                          )}
-                        </div>
+                      <div className="form-control">
+                        <label className="label">
+                          <span className="label-text font-medium text-gray-300">Expected Output</span>
+                        </label>
+                        <textarea
+                          className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 px-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-24 resize-y ${
+                            errors.testcases?.[index]?.output ? "border-red-500" : ""
+                          }`}
+                          {...register(`testcases.${index}.output`)}
+                          placeholder="Enter expected output"
+                        />
+                        {errors.testcases?.[index]?.output && (
+                          <p className="text-red-400 text-sm mt-1">{errors.testcases[index].output.message}</p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -821,9 +817,7 @@ const CreateProblemForm = () => {
               </div>
               {errors.testcases && !Array.isArray(errors.testcases) && (
                 <div className="mt-2">
-                  <span className="text-error text-sm">
-                    {errors.testcases.message}
-                  </span>
+                  <span className="text-red-400 text-sm">{errors.testcases.message}</span>
                 </div>
               )}
             </div>
@@ -833,21 +827,21 @@ const CreateProblemForm = () => {
               {["JAVASCRIPT", "PYTHON", "JAVA"].map((language) => (
                 <div
                   key={language}
-                  className="card bg-base-200 p-4 md:p-6 shadow-md"
+                  className="bg-[#0f0f0f] border border-gray-800 rounded-lg p-5 shadow-md"
                 >
-                  <h3 className="text-lg md:text-xl font-semibold mb-6 flex items-center gap-2">
-                    <Code2 className="w-5 h-5" />
+                  <h3 className="text-lg font-semibold mb-6 flex items-center gap-2 text-gray-100">
+                    <Code2 className="w-5 h-5 text-blue-400" />
                     {language}
                   </h3>
 
                   <div className="space-y-6">
                     {/* Starter Code */}
-                    <div className="card bg-base-100 shadow-md">
-                      <div className="card-body p-4 md:p-6">
-                        <h4 className="font-semibold text-base md:text-lg mb-4">
-                          Starter Code Template
-                        </h4>
-                        <div className="border rounded-md overflow-hidden">
+                    <div className="bg-[#121212] border border-gray-800 rounded-lg shadow-md overflow-hidden">
+                      <div className="bg-[#0c0c0c] px-4 py-3 border-b border-gray-800">
+                        <h4 className="font-semibold text-gray-200">Starter Code Template</h4>
+                      </div>
+                      <div className="p-4">
+                        <div className="border border-gray-700 rounded-md overflow-hidden">
                           <Controller
                             name={`codeSnippets.${language}`}
                             control={control}
@@ -872,22 +866,22 @@ const CreateProblemForm = () => {
                         </div>
                         {errors.codeSnippets?.[language] && (
                           <div className="mt-2">
-                            <span className="text-error text-sm">
-                              {errors.codeSnippets[language].message}
-                            </span>
+                            <span className="text-red-400 text-sm">{errors.codeSnippets[language].message}</span>
                           </div>
                         )}
                       </div>
                     </div>
 
                     {/* Reference Solution */}
-                    <div className="card bg-base-100 shadow-md">
-                      <div className="card-body p-4 md:p-6">
-                        <h4 className="font-semibold text-base md:text-lg mb-4 flex items-center gap-2">
-                          <CheckCircle2 className="w-5 h-5 text-success" />
+                    <div className="bg-[#121212] border border-gray-800 rounded-lg shadow-md overflow-hidden">
+                      <div className="bg-[#0c0c0c] px-4 py-3 border-b border-gray-800">
+                        <h4 className="font-semibold text-gray-200 flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-green-400" />
                           Reference Solution
                         </h4>
-                        <div className="border rounded-md overflow-hidden">
+                      </div>
+                      <div className="p-4">
+                        <div className="border border-gray-700 rounded-md overflow-hidden">
                           <Controller
                             name={`referenceSolutions.${language}`}
                             control={control}
@@ -912,67 +906,55 @@ const CreateProblemForm = () => {
                         </div>
                         {errors.referenceSolutions?.[language] && (
                           <div className="mt-2">
-                            <span className="text-error text-sm">
-                              {errors.referenceSolutions[language].message}
-                            </span>
+                            <span className="text-red-400 text-sm">{errors.referenceSolutions[language].message}</span>
                           </div>
                         )}
                       </div>
                     </div>
 
                     {/* Examples */}
-                    <div className="card bg-base-100 shadow-md">
-                      <div className="card-body p-4 md:p-6">
-                        <h4 className="font-semibold text-base md:text-lg mb-4">
-                          Example
-                        </h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <div className="bg-[#121212] border border-gray-800 rounded-lg shadow-md overflow-hidden">
+                      <div className="bg-[#0c0c0c] px-4 py-3 border-b border-gray-800">
+                        <h4 className="font-semibold text-gray-200">Example</h4>
+                      </div>
+                      <div className="p-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="form-control">
                             <label className="label">
-                              <span className="label-text font-medium">
-                                Input
-                              </span>
+                              <span className="label-text font-medium text-gray-300">Input</span>
                             </label>
                             <textarea
-                              className="textarea textarea-bordered min-h-20 w-full p-3 resize-y"
+                              className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 px-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-20 resize-y ${
+                                errors.examples?.[language]?.input ? "border-red-500" : ""
+                              }`}
                               {...register(`examples.${language}.input`)}
                               placeholder="Example input"
                             />
                             {errors.examples?.[language]?.input && (
-                              <label className="label">
-                                <span className="label-text-alt text-error">
-                                  {errors.examples[language].input.message}
-                                </span>
-                              </label>
+                              <p className="text-red-400 text-sm mt-1">{errors.examples[language].input.message}</p>
                             )}
                           </div>
                           <div className="form-control">
                             <label className="label">
-                              <span className="label-text font-medium">
-                                Output
-                              </span>
+                              <span className="label-text font-medium text-gray-300">Output</span>
                             </label>
                             <textarea
-                              className="textarea textarea-bordered min-h-20 w-full p-3 resize-y"
+                              className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 px-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-20 resize-y ${
+                                errors.examples?.[language]?.output ? "border-red-500" : ""
+                              }`}
                               {...register(`examples.${language}.output`)}
                               placeholder="Example output"
                             />
                             {errors.examples?.[language]?.output && (
-                              <label className="label">
-                                <span className="label-text-alt text-error">
-                                  {errors.examples[language].output.message}
-                                </span>
-                              </label>
+                              <p className="text-red-400 text-sm mt-1">{errors.examples[language].output.message}</p>
                             )}
                           </div>
                           <div className="form-control md:col-span-2">
                             <label className="label">
-                              <span className="label-text font-medium">
-                                Explanation
-                              </span>
+                              <span className="label-text font-medium text-gray-300">Explanation</span>
                             </label>
                             <textarea
-                              className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
+                              className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 px-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-24 resize-y`}
                               {...register(`examples.${language}.explanation`)}
                               placeholder="Explain the example"
                             />
@@ -986,49 +968,43 @@ const CreateProblemForm = () => {
             </div>
 
             {/* Additional Information */}
-            <div className="card bg-base-200 p-4 md:p-6 shadow-md">
-              <h3 className="text-lg md:text-xl font-semibold mb-6 flex items-center gap-2">
-                <Lightbulb className="w-5 h-5 text-warning" />
+            <div className="bg-[#0f0f0f] border border-gray-800 rounded-lg p-5 shadow-md">
+              <h3 className="text-lg font-semibold mb-6 flex items-center gap-2 text-gray-100">
+                <Lightbulb className="w-5 h-5 text-yellow-400" />
                 Additional Information
               </h3>
               <div className="space-y-6">
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-medium">Constraints</span>
+                    <span className="label-text font-medium text-gray-300">Constraints</span>
                   </label>
                   <textarea
-                    className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
+                    className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-3 px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-24 resize-y ${
+                      errors.constraints ? "border-red-500" : ""
+                    }`}
                     {...register("constraints")}
                     placeholder="Enter problem constraints"
                   />
                   {errors.constraints && (
-                    <label className="label">
-                      <span className="label-text-alt text-error">
-                        {errors.constraints.message}
-                      </span>
-                    </label>
+                    <p className="text-red-400 text-sm mt-1">{errors.constraints.message}</p>
                   )}
                 </div>
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-medium">
-                      Hints (Optional)
-                    </span>
+                    <span className="label-text font-medium text-gray-300">Hints (Optional)</span>
                   </label>
                   <textarea
-                    className="textarea textarea-bordered min-h-24 w-full p-3 resize-y"
+                    className="w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-3 px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-24 resize-y"
                     {...register("hints")}
                     placeholder="Enter hints for solving the problem"
                   />
                 </div>
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-medium">
-                      Editorial (Optional)
-                    </span>
+                    <span className="label-text font-medium text-gray-300">Editorial (Optional)</span>
                   </label>
                   <textarea
-                    className="textarea textarea-bordered min-h-32 w-full p-3 resize-y"
+                    className="w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-3 px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-32 resize-y"
                     {...register("editorial")}
                     placeholder="Enter problem editorial/solution explanation"
                   />
@@ -1036,13 +1012,20 @@ const CreateProblemForm = () => {
               </div>
             </div>
 
-            <div className="card-actions justify-end pt-4 border-t">
-              <button type="submit" className="btn btn-primary btn-lg gap-2">
+            <div className="pt-6 border-t border-gray-800 flex justify-end">
+              <button 
+                type="submit" 
+                className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
+                disabled={isLoading}
+              >
                 {isLoading ? (
-                  <span className="loading loading-spinner text-white"></span>
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin mr-2 inline" />
+                    Creating Problem...
+                  </>
                 ) : (
                   <>
-                    <CheckCircle2 className="w-5 h-5" />
+                    <CheckCircle2 className="w-5 h-5 mr-2 inline" />
                     Create Problem
                   </>
                 )}
