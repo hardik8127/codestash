@@ -2085,6 +2085,7 @@ export namespace Prisma {
     verificationToken: string | null
     resetPasswordToken: string | null
     resetPasswordExpires: Date | null
+    googleId: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2100,6 +2101,7 @@ export namespace Prisma {
     verificationToken: string | null
     resetPasswordToken: string | null
     resetPasswordExpires: Date | null
+    googleId: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2115,6 +2117,7 @@ export namespace Prisma {
     verificationToken: number
     resetPasswordToken: number
     resetPasswordExpires: number
+    googleId: number
     _all: number
   }
 
@@ -2132,6 +2135,7 @@ export namespace Prisma {
     verificationToken?: true
     resetPasswordToken?: true
     resetPasswordExpires?: true
+    googleId?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2147,6 +2151,7 @@ export namespace Prisma {
     verificationToken?: true
     resetPasswordToken?: true
     resetPasswordExpires?: true
+    googleId?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -2162,6 +2167,7 @@ export namespace Prisma {
     verificationToken?: true
     resetPasswordToken?: true
     resetPasswordExpires?: true
+    googleId?: true
     _all?: true
   }
 
@@ -2250,6 +2256,7 @@ export namespace Prisma {
     verificationToken: string | null
     resetPasswordToken: string | null
     resetPasswordExpires: Date | null
+    googleId: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -2282,6 +2289,7 @@ export namespace Prisma {
     verificationToken?: boolean
     resetPasswordToken?: boolean
     resetPasswordExpires?: boolean
+    googleId?: boolean
     Problems?: boolean | User$ProblemsArgs<ExtArgs>
     submission?: boolean | User$submissionArgs<ExtArgs>
     solvedProblem?: boolean | User$solvedProblemArgs<ExtArgs>
@@ -2306,6 +2314,7 @@ export namespace Prisma {
     verificationToken?: boolean
     resetPasswordToken?: boolean
     resetPasswordExpires?: boolean
+    googleId?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2321,6 +2330,7 @@ export namespace Prisma {
     verificationToken?: boolean
     resetPasswordToken?: boolean
     resetPasswordExpires?: boolean
+    googleId?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2336,9 +2346,10 @@ export namespace Prisma {
     verificationToken?: boolean
     resetPasswordToken?: boolean
     resetPasswordExpires?: boolean
+    googleId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "image" | "role" | "password" | "createdAt" | "updatedAt" | "isVerified" | "verificationToken" | "resetPasswordToken" | "resetPasswordExpires", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "image" | "role" | "password" | "createdAt" | "updatedAt" | "isVerified" | "verificationToken" | "resetPasswordToken" | "resetPasswordExpires" | "googleId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     Problems?: boolean | User$ProblemsArgs<ExtArgs>
     submission?: boolean | User$submissionArgs<ExtArgs>
@@ -2378,6 +2389,7 @@ export namespace Prisma {
       verificationToken: string | null
       resetPasswordToken: string | null
       resetPasswordExpires: Date | null
+      googleId: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2821,6 +2833,7 @@ export namespace Prisma {
     readonly verificationToken: FieldRef<"User", 'String'>
     readonly resetPasswordToken: FieldRef<"User", 'String'>
     readonly resetPasswordExpires: FieldRef<"User", 'DateTime'>
+    readonly googleId: FieldRef<"User", 'String'>
   }
     
 
@@ -14726,7 +14739,8 @@ export namespace Prisma {
     isVerified: 'isVerified',
     verificationToken: 'verificationToken',
     resetPasswordToken: 'resetPasswordToken',
-    resetPasswordExpires: 'resetPasswordExpires'
+    resetPasswordExpires: 'resetPasswordExpires',
+    googleId: 'googleId'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -15040,6 +15054,7 @@ export namespace Prisma {
     verificationToken?: StringNullableFilter<"User"> | string | null
     resetPasswordToken?: StringNullableFilter<"User"> | string | null
     resetPasswordExpires?: DateTimeNullableFilter<"User"> | Date | string | null
+    googleId?: StringNullableFilter<"User"> | string | null
     Problems?: ProblemListRelationFilter
     submission?: SubmissionListRelationFilter
     solvedProblem?: ProblemSolvedListRelationFilter
@@ -15063,6 +15078,7 @@ export namespace Prisma {
     verificationToken?: SortOrderInput | SortOrder
     resetPasswordToken?: SortOrderInput | SortOrder
     resetPasswordExpires?: SortOrderInput | SortOrder
+    googleId?: SortOrderInput | SortOrder
     Problems?: ProblemOrderByRelationAggregateInput
     submission?: SubmissionOrderByRelationAggregateInput
     solvedProblem?: ProblemSolvedOrderByRelationAggregateInput
@@ -15076,6 +15092,7 @@ export namespace Prisma {
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
+    googleId?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -15097,7 +15114,7 @@ export namespace Prisma {
     discussion?: DiscussionListRelationFilter
     comment?: CommentListRelationFilter
     like?: LikeListRelationFilter
-  }, "id" | "email">
+  }, "id" | "email" | "googleId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -15112,6 +15129,7 @@ export namespace Prisma {
     verificationToken?: SortOrderInput | SortOrder
     resetPasswordToken?: SortOrderInput | SortOrder
     resetPasswordExpires?: SortOrderInput | SortOrder
+    googleId?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -15133,6 +15151,7 @@ export namespace Prisma {
     verificationToken?: StringNullableWithAggregatesFilter<"User"> | string | null
     resetPasswordToken?: StringNullableWithAggregatesFilter<"User"> | string | null
     resetPasswordExpires?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    googleId?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type ProblemWhereInput = {
@@ -15894,6 +15913,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemCreateNestedManyWithoutUserInput
     submission?: SubmissionCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedCreateNestedManyWithoutUserInput
@@ -15917,6 +15937,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
@@ -15940,6 +15961,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUpdateManyWithoutUserNestedInput
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUpdateManyWithoutUserNestedInput
@@ -15963,6 +15985,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
@@ -15986,6 +16009,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -16001,6 +16025,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -16016,6 +16041,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type ProblemCreateInput = {
@@ -16959,6 +16985,7 @@ export namespace Prisma {
     verificationToken?: SortOrder
     resetPasswordToken?: SortOrder
     resetPasswordExpires?: SortOrder
+    googleId?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -16974,6 +17001,7 @@ export namespace Prisma {
     verificationToken?: SortOrder
     resetPasswordToken?: SortOrder
     resetPasswordExpires?: SortOrder
+    googleId?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -16989,6 +17017,7 @@ export namespace Prisma {
     verificationToken?: SortOrder
     resetPasswordToken?: SortOrder
     resetPasswordExpires?: SortOrder
+    googleId?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -19247,6 +19276,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     submission?: SubmissionCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedCreateNestedManyWithoutUserInput
     playlist?: PlaylistCreateNestedManyWithoutUserInput
@@ -19269,6 +19299,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
     playlist?: PlaylistUncheckedCreateNestedManyWithoutUserInput
@@ -19431,6 +19462,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUpdateManyWithoutUserNestedInput
     playlist?: PlaylistUpdateManyWithoutUserNestedInput
@@ -19453,6 +19485,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
     playlist?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
@@ -19550,6 +19583,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedCreateNestedManyWithoutUserInput
     playlist?: PlaylistCreateNestedManyWithoutUserInput
@@ -19572,6 +19606,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
     playlist?: PlaylistUncheckedCreateNestedManyWithoutUserInput
@@ -19697,6 +19732,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUpdateManyWithoutUserNestedInput
     playlist?: PlaylistUpdateManyWithoutUserNestedInput
@@ -19719,6 +19755,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
     playlist?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
@@ -19913,6 +19950,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemCreateNestedManyWithoutUserInput
     submission?: SubmissionCreateNestedManyWithoutUserInput
     playlist?: PlaylistCreateNestedManyWithoutUserInput
@@ -19935,6 +19973,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     playlist?: PlaylistUncheckedCreateNestedManyWithoutUserInput
@@ -20020,6 +20059,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUpdateManyWithoutUserNestedInput
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     playlist?: PlaylistUpdateManyWithoutUserNestedInput
@@ -20042,6 +20082,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     playlist?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
@@ -20141,6 +20182,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemCreateNestedManyWithoutUserInput
     submission?: SubmissionCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedCreateNestedManyWithoutUserInput
@@ -20163,6 +20205,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
@@ -20217,6 +20260,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUpdateManyWithoutUserNestedInput
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUpdateManyWithoutUserNestedInput
@@ -20239,6 +20283,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
@@ -20413,6 +20458,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemCreateNestedManyWithoutUserInput
     submission?: SubmissionCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedCreateNestedManyWithoutUserInput
@@ -20435,6 +20481,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
@@ -20473,6 +20520,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUpdateManyWithoutUserNestedInput
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUpdateManyWithoutUserNestedInput
@@ -20495,6 +20543,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
@@ -20517,6 +20566,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemCreateNestedManyWithoutUserInput
     submission?: SubmissionCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedCreateNestedManyWithoutUserInput
@@ -20539,6 +20589,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
@@ -20668,6 +20719,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUpdateManyWithoutUserNestedInput
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUpdateManyWithoutUserNestedInput
@@ -20690,6 +20742,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
@@ -20797,6 +20850,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemCreateNestedManyWithoutUserInput
     submission?: SubmissionCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedCreateNestedManyWithoutUserInput
@@ -20819,6 +20873,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
@@ -20884,6 +20939,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUpdateManyWithoutUserNestedInput
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUpdateManyWithoutUserNestedInput
@@ -20906,6 +20962,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
@@ -20961,6 +21018,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemCreateNestedManyWithoutUserInput
     submission?: SubmissionCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedCreateNestedManyWithoutUserInput
@@ -20983,6 +21041,7 @@ export namespace Prisma {
     verificationToken?: string | null
     resetPasswordToken?: string | null
     resetPasswordExpires?: Date | string | null
+    googleId?: string | null
     Problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     solvedProblem?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
@@ -21048,6 +21107,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUpdateManyWithoutUserNestedInput
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUpdateManyWithoutUserNestedInput
@@ -21070,6 +21130,7 @@ export namespace Prisma {
     verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordToken?: NullableStringFieldUpdateOperationsInput | string | null
     resetPasswordExpires?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleId?: NullableStringFieldUpdateOperationsInput | string | null
     Problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     solvedProblem?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput

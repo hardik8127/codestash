@@ -15,6 +15,7 @@ import {
 import {z} from "zod";
 import AuthImagePattern from '../components/AuthImagePattern';
 import { useAuthStore } from "../store/useAuthStore";
+import GoogleLoginButton from '../components/GoogleLoginButton';
 
 const SignUpSchema = z.object({
   email:z.string().email("Enter a valid email"),
@@ -168,6 +169,18 @@ const SignUpPage = () => {
                 "Create Account"
               )}
             </button>
+
+            {/* Divider */}
+            <div className="relative flex items-center justify-center mt-6">
+              <div className="border-t border-gray-700 w-full"></div>
+              <span className="bg-[#0a0a0a] px-4 text-gray-400 text-sm">or</span>
+              <div className="border-t border-gray-700 w-full"></div>
+            </div>
+
+            {/* Google Login Button */}
+            <div className="mt-4">
+              <GoogleLoginButton />
+            </div>
           </form>
 
           {/* Footer */}

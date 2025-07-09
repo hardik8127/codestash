@@ -6,6 +6,8 @@ import HomePage from "./page/HomePage";
 import LoginPage from "./page/LoginPage";
 import SignUpPage from "./page/SignUpPage";
 import LandingPage from "./page/LandingPage";
+import ForgotPasswordPage from "./page/ForgotPasswordPage";
+import ResetPasswordPage from "./page/ResetPasswordPage";
 import { useAuthStore } from "./store/useAuthStore";
 import { Loader } from "lucide-react";
 import Layout from "./layout/Layout";
@@ -60,6 +62,24 @@ const App = () => {
           element={!authUser ? (
             <LandingLayout>
               <SignUpPage />
+            </LandingLayout>
+          ) : <Navigate to={"/home"} />}
+        />
+
+        <Route
+          path="/forgot-password"
+          element={!authUser ? (
+            <LandingLayout>
+              <ForgotPasswordPage />
+            </LandingLayout>
+          ) : <Navigate to={"/home"} />}
+        />
+
+        <Route
+          path="/reset/:token"
+          element={!authUser ? (
+            <LandingLayout>
+              <ResetPasswordPage />
             </LandingLayout>
           ) : <Navigate to={"/home"} />}
         /><Route

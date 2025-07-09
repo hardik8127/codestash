@@ -4,6 +4,10 @@ import { UserRole } from "../generated/prisma/index.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import nodemailer from "nodemailer";
+import { OAuth2Client } from "google-auth-library";
+
+// Initialize Google OAuth client
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export const register = async (req, res) => {
   const { email, password, name } = req.body;
@@ -96,6 +100,13 @@ export const login = async (req, res) => {
     if (!user) {
       return res.status(401).json({
         message: "User Not Found",
+      });
+    }
+
+    // Check if user has a password (not a Google user)
+    if (!user.password || user.password === '') {
+      return res.status(401).json({
+        message: "Please use Google Sign-In for this account",
       });
     }
 
@@ -261,7 +272,7 @@ export const forgotPassword = async (req, res) => {
       from: process.env.MAILTRAP_SENDEREMAIL,
       to: user.email,
       subject: "Reset your Password",
-      text: `Please click on the link: ${process.env.BASE_URL}/api/v1/auth/reset/${resetPassToken}`,
+      text: `Please click on the link to reset your password: ${process.env.FRONTEND_URL}/reset/${resetPassToken}`,
     };
 
     await transporter.sendMail(mailOptions);
@@ -338,6 +349,85 @@ export const resetPassword = async (req, res) => {
     return res.status(500).json({
       message: "Error resetting password",
       success: false,
+    });
+  }
+};
+
+export const googleAuth = async (req, res) => {
+  const { credential } = req.body; // coming from Google login on frontend
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    const { email, name, picture, sub: googleId } = payload;
+
+    let user = await db.User.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      // User doesn't exist, create them
+      user = await db.User.create({
+        data: {
+          name,
+          email,
+          image: picture,
+          password: '', // Google users don't need a password
+          role: UserRole.USER,
+          isVerified: true, // Auto-verify Google users
+          googleId,
+        },
+      });
+    } else if (!user.googleId) {
+      // If user exists but doesn't have googleId, update it
+      user = await db.User.update({
+        where: { id: user.id },
+        data: {
+          googleId,
+          isVerified: true,
+          image: picture, // Update profile picture
+        },
+      });
+    }
+
+    // Generate JWT token (same as your existing login)
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "24h",
+    });
+
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    const cookieOptions = {
+      httpOnly: true,
+      secure: isProduction,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      sameSite: isProduction ? 'none' : 'lax',
+    };
+
+    return res
+      .status(200)
+      .cookie('jwt', token, cookieOptions)
+      .json({
+        success: true,
+        message: 'Google login successful',
+        User: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          image: user.image,
+        },
+      });
+  } catch (error) {
+    console.error('Google login error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Google login failed',
     });
   }
 };

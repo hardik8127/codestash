@@ -32,6 +32,7 @@ model User {
   verificationToken    String?
   resetPasswordToken   String?
   resetPasswordExpires DateTime?
+  googleId             String?         @unique
   Problems             Problem[]
   submission           Submission[]
   solvedProblem        ProblemSolved[]

@@ -17,12 +17,13 @@ export const useAuthStore = create((set) => ({
       if (res.data && res.data.user) {
         console.log("User data from checkAuth:", res.data.user);
         set({ authUser: res.data.user });
+      } else if (res.data && res.data.User) {
+        // Handle the capitalized User field from your backend responses
+        console.log("User data from checkAuth (capitalized):", res.data.User);
+        set({ authUser: res.data.User });
       } else {
-        console.log("No user data in checkAuth response or different structure:", res.data);
-        // Try to find user data in different locations
-        const userData = res.data.userData || res.data || null;
-        console.log("Attempting to use this as user data:", userData);
-        set({ authUser: userData });
+        console.log("No user data in checkAuth response:", res.data);
+        set({ authUser: null });
       }
     } catch (error) {
       console.log("❌ Error checking auth:", error);
@@ -38,15 +39,15 @@ export const useAuthStore = create((set) => ({
       const res = await axiosInstance.post("/auth/register", data);
       console.log("Signup response:", res.data);
 
-      if (res.data && res.data.user) {
-        console.log("User data from signup:", res.data.user);
+      if (res.data && res.data.User) {
+        console.log("User data from signup:", res.data.User);
+        set({ authUser: res.data.User });
+      } else if (res.data && res.data.user) {
+        console.log("User data from signup (lowercase):", res.data.user);
         set({ authUser: res.data.user });
       } else {
         console.log("User data structure is different in signup response:", res.data);
-        // Try to find user data in the response
-        const userData = res.data.userData || res.data || null;
-        console.log("Attempting to use this as user data:", userData);
-        set({ authUser: userData });
+        set({ authUser: null });
       }
 
       toast.success(res.data.message || "Signup successful");
@@ -68,15 +69,15 @@ export const useAuthStore = create((set) => ({
       console.log("Login response data:", res.data);
       
       // Check the actual structure of the response
-      if (res.data && res.data.user) {
-        console.log("User data from response:", res.data.user);
+      if (res.data && res.data.User) {
+        console.log("User data from login response (capitalized):", res.data.User);
+        set({ authUser: res.data.User });
+      } else if (res.data && res.data.user) {
+        console.log("User data from login response (lowercase):", res.data.user);
         set({ authUser: res.data.user });
       } else {
         console.log("User data structure is different than expected. Full response:", res.data);
-        // Try to find user data in the response
-        const userData = res.data.userData || res.data || {};
-        console.log("Attempting to use this as user data:", userData);
-        set({ authUser: userData });
+        set({ authUser: null });
       }
       
       toast.success(res.data.message || "Login successful");
@@ -99,6 +100,30 @@ export const useAuthStore = create((set) => ({
     } catch (error) {
       console.log("Error logging out", error);
       toast.error("Error logging out");
+    }
+  },
+
+  forgotPassword: async (email) => {
+    try {
+      const res = await axiosInstance.post("/auth/forgot-password", { email });
+      toast.success(res.data.message || "Password reset email sent");
+      return res.data;
+    } catch (error) {
+      console.log("Error sending reset email", error);
+      toast.error(error.response?.data?.message || "Error sending reset email");
+      throw error;
+    }
+  },
+
+  resetPassword: async (token, password) => {
+    try {
+      const res = await axiosInstance.post(`/auth/reset/${token}`, { password });
+      toast.success(res.data.message || "Password reset successful");
+      return res.data;
+    } catch (error) {
+      console.log("Error resetting password", error);
+      toast.error(error.response?.data?.message || "Error resetting password");
+      throw error;
     }
   },
 }));
