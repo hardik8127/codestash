@@ -2,6 +2,12 @@ import bcrypt from "bcryptjs";
 import { db } from "../libs/db.js";
 import { UserRole } from "../generated/prisma/index.js";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import nodemailer from "nodemailer";
+import { OAuth2Client } from "google-auth-library";
+
+// Initialize Google OAuth client
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 export const register = async (req, res) => {
   const { email, password, name } = req.body;
@@ -20,25 +26,45 @@ export const register = async (req, res) => {
       });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
+    const verificationToken = crypto.randomBytes(32).toString("hex");
     const newUser = await db.User.create({
       data: {
         email,
         password: hashedPassword,
         name,
         role: UserRole.USER,
+        verificationToken: verificationToken,
+        isVerified: false,
       },
     });
 
-    const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+    const transporter = nodemailer.createTransport({
+      host: process.env.MAILTRAP_HOST,
+      port: 587,
+      secure: false, // true for port 465, false for other ports
+      auth: {
+        user: process.env.MAILTRAP_USERNAME,
+        pass: process.env.MAILTRAP_PASSWORD,
+      },
     });
 
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      sameSite: "strict",
-      secure: process.env.NODE_ENV !== "development",
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    });
+    const mailOptions = {
+      from: process.env.MAILTRAP_SENDEREMAIL,
+      to: newUser.email, // Changed from user.email to newUser.email
+      subject: "Verify your email",
+      text: `Please click on the link: ${process.env.BASE_URL}/api/v1/auth/verify/${verificationToken}`, // Changed token to verificationToken and users to auth
+    };
+    await transporter.sendMail(mailOptions);
+    // const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, {
+    //   expiresIn: "7d",
+    // });
+
+    // res.cookie("jwt", token, {
+    //   httpOnly: true,
+    //   sameSite: "strict",
+    //   secure: process.env.NODE_ENV !== "development",
+    //   maxAge: 1000 * 60 * 60 * 24 * 7,
+    // });
 
     res.status(201).json({
       message: "User Created Successfully",
@@ -77,6 +103,13 @@ export const login = async (req, res) => {
       });
     }
 
+    // Check if user has a password (not a Google user)
+    if (!user.password || user.password === '') {
+      return res.status(401).json({
+        message: "Please use Google Sign-In for this account",
+      });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({
@@ -85,7 +118,7 @@ export const login = async (req, res) => {
     }
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+      expiresIn: "24h",
     });
 
     res.cookie("jwt", token, {
@@ -144,3 +177,258 @@ export const check = async (req, res) => {
     });
   }
 };
+
+export const verifyUser = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    if (!token) {
+      return res.status(400).json({
+        message: "Invalid verification link",
+      });
+    }
+
+    // Find user by verification token
+    const user = await db.User.findFirst({
+      where: {
+        verificationToken: token,
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Invalid verification token or user already verified",
+      });
+    }
+
+    // Update user verification status
+    await db.User.update({
+      where: { id: user.id },
+      data: {
+        isVerified: true,
+        verificationToken: null,
+      },
+    });
+
+    // Send success response
+    return res.status(200).json({
+      success: true,
+      message: "Email verified successfully. You can now log in.",
+    });
+  } catch (error) {
+    console.error("Error verifying user:", error);
+    return res.status(500).json({
+      message: "Error verifying user",
+    });
+  }
+};
+
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        message: "Email is required",
+      });
+    }
+
+    const user = await db.User.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "User Not Found",
+      });
+    }
+
+    const resetPassToken = crypto.randomBytes(32).toString("hex");
+    const resetPassExpiry = new Date(Date.now() + 10 * 60 * 1000); // Use Date object for DateTime field
+
+    await db.User.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        resetPasswordToken: resetPassToken,
+        resetPasswordExpires: resetPassExpiry,
+      },
+    });
+
+    const transporter = nodemailer.createTransport({
+      host: process.env.MAILTRAP_HOST,
+      port: 587,
+      secure: false, // true for port 465, false for other ports
+      auth: {
+        user: process.env.MAILTRAP_USERNAME,
+        pass: process.env.MAILTRAP_PASSWORD,
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.MAILTRAP_SENDEREMAIL,
+      to: user.email,
+      subject: "Reset your Password",
+      text: `Please click on the link to reset your password: ${process.env.FRONTEND_URL}/reset/${resetPassToken}`,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({
+      message: "Password reset email sent successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error in forgot password:", error);
+    res.status(500).json({
+      message: "Error processing forgot password request",
+      success: false,
+    });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { password } = req.body;
+    const { resetPassToken } = req.params;
+
+    if (!password) {
+      return res.status(400).json({
+        message: "Password is required",
+      });
+    }
+
+    if (!resetPassToken) {
+      return res.status(400).json({
+        message: "Invalid password reset token",
+      });
+    }
+
+    // Find user with valid token that hasn't expired
+    const user = await db.User.findFirst({
+      where: {
+        resetPasswordToken: resetPassToken,
+        resetPasswordExpires: {
+          gt: new Date(), // Use Prisma's gt operator instead of $gt
+        },
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Password reset token is invalid or has expired",
+      });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Update user with new password and clear reset token fields
+    await db.User.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        password: hashedPassword,
+        resetPasswordToken: null,
+        resetPasswordExpires: null,
+      },
+    });
+
+    // Return success response
+    return res.status(200).json({
+      success: true,
+      message:
+        "Password has been reset successfully. You can now log in with your new password.",
+    });
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    return res.status(500).json({
+      message: "Error resetting password",
+      success: false,
+    });
+  }
+};
+
+export const googleAuth = async (req, res) => {
+  const { credential } = req.body; // coming from Google login on frontend
+
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const payload = ticket.getPayload();
+
+    const { email, name, picture, sub: googleId } = payload;
+
+    let user = await db.User.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      // User doesn't exist, create them
+      user = await db.User.create({
+        data: {
+          name,
+          email,
+          image: picture,
+          password: '', // Google users don't need a password
+          role: UserRole.USER,
+          isVerified: true, // Auto-verify Google users
+          googleId,
+        },
+      });
+    } else if (!user.googleId) {
+      // If user exists but doesn't have googleId, update it
+      user = await db.User.update({
+        where: { id: user.id },
+        data: {
+          googleId,
+          isVerified: true,
+          image: picture, // Update profile picture
+        },
+      });
+    }
+
+    // Generate JWT token (same as your existing login)
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "24h",
+    });
+
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    const cookieOptions = {
+      httpOnly: true,
+      secure: isProduction,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+      sameSite: isProduction ? 'none' : 'lax',
+    };
+
+    return res
+      .status(200)
+      .cookie('jwt', token, cookieOptions)
+      .json({
+        success: true,
+        message: 'Google login successful',
+        User: {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role,
+          image: user.image,
+        },
+      });
+  } catch (error) {
+    console.error('Google login error:', error);
+    return res.status(500).json({
+      success: false,
+      message: 'Google login failed',
+    });
+  }
+};
+ 

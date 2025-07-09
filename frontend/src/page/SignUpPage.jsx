@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Code,
   Eye,
@@ -15,6 +15,7 @@ import {
 import {z} from "zod";
 import AuthImagePattern from '../components/AuthImagePattern';
 import { useAuthStore } from "../store/useAuthStore";
+import GoogleLoginButton from '../components/GoogleLoginButton';
 
 const SignUpSchema = z.object({
   email:z.string().email("Enter a valid email"),
@@ -27,6 +28,7 @@ const SignUpPage = () => {
   const [showPassword , setShowPassword] = useState(false);
 
   const {signup , isSigninUp} = useAuthStore()
+  const navigate = useNavigate();
 
   const {
     register,
@@ -39,6 +41,7 @@ const SignUpPage = () => {
   const onSubmit = async (data)=>{
    try {
     await signup(data)
+    navigate('/login')
     console.log("signup data" , data)
    } catch (error) {
      console.error("SignUp failed:", error);
@@ -166,6 +169,18 @@ const SignUpPage = () => {
                 "Create Account"
               )}
             </button>
+
+            {/* Divider */}
+            <div className="relative flex items-center justify-center mt-6">
+              <div className="border-t border-gray-700 w-full"></div>
+              <span className="bg-[#0a0a0a] px-4 text-gray-400 text-sm">or</span>
+              <div className="border-t border-gray-700 w-full"></div>
+            </div>
+
+            {/* Google Login Button */}
+            <div className="mt-4">
+              <GoogleLoginButton />
+            </div>
           </form>
 
           {/* Footer */}

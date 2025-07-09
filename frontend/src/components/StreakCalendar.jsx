@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 const StreakCalendar = () => {
   // Sample data - replace with your API data
-  const { streakData, getStreakData } = useStreakStore();
+  const { streakData, getStreakData, isLoading } = useStreakStore();
   const [currentDate] = useState(new Date());
 
   useEffect(() => {
@@ -63,11 +63,27 @@ const StreakCalendar = () => {
     return { currentStreak, maxStreak };
   }, [streakData]);
 
-  if (streakData.length === 0) {
+  if (isLoading) {
     return (
       <div>
         <div className="flex items-center justify-center">
           <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+        </div>
+      </div>
+    );
+  }
+  
+  // Handle empty streak data
+  if (streakData.length === 0) {
+    return (
+      <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white p-6 rounded-lg shadow-lg mx-auto mt-6">
+        <h1 className="text-2xl font-bold mb-6">Monthly Streak</h1>
+        <div className="text-center py-8">
+          <div className="text-5xl mb-4">🔮</div>
+          <p className="text-gray-600 dark:text-gray-400">No streak data yet.</p>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
+            Solve problems to start building your streak!
+          </p>
         </div>
       </div>
     );
@@ -130,16 +146,6 @@ const StreakCalendar = () => {
     if (streakCount > 0) return "🔥";
     return "😢";
   };
-
-  if (streakData.length === 0) {
-    return (
-      <div>
-        <div className="flex items-center justify-center">
-          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white p-6 rounded-lg shadow-lg mx-auto mt-6">

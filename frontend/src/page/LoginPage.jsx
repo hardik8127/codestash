@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import {useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Code,
   Eye,
@@ -14,6 +14,7 @@ import {
 import {z} from "zod";
 import AuthImagePattern from '../components/AuthImagePattern';
 import { useAuthStore } from '../store/useAuthStore';
+import GoogleLoginButton from '../components/GoogleLoginButton';
 
 
 const LoginSchema = z.object({
@@ -26,6 +27,7 @@ const LoginPage = () => {
 
   const {isLoggingIn , login} = useAuthStore()
   const [showPassword , setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const {
     register ,
@@ -37,10 +39,12 @@ const LoginPage = () => {
 
   const onSubmit = async (data)=>{
     try {
-      await login(data)
+      const response = await login(data)
+      console.log("Login successful:", response)
+      navigate('/home')
       
     } catch (error) {
-      console.error("Signup failed" , error)
+      console.error("Login failed" , error)
     }
   }
 
@@ -124,6 +128,16 @@ const LoginPage = () => {
               {errors.password && (
                 <p className="text-red-400 text-sm mt-1.5 ml-1">{errors.password.message}</p>
               )}
+              
+              {/* Forgot Password Link */}
+              <div className="flex justify-end mt-2">
+                <Link 
+                  to="/forgot-password" 
+                  className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
+                >
+                  Forgot password?
+                </Link>
+              </div>
             </div>
 
             {/* Submit Button */}
@@ -141,6 +155,18 @@ const LoginPage = () => {
                 "Sign in"
               )}
             </button>
+
+            {/* Divider */}
+            <div className="relative flex items-center justify-center mt-6">
+              <div className="border-t border-gray-700 w-full"></div>
+              <span className="bg-[#0a0a0a] px-4 text-gray-400 text-sm">or</span>
+              <div className="border-t border-gray-700 w-full"></div>
+            </div>
+
+            {/* Google Login Button */}
+            <div className="mt-4">
+              <GoogleLoginButton />
+            </div>
           </form>
 
           {/* Footer */}
