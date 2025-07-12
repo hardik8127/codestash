@@ -16,6 +16,7 @@ import AdminRoute from "./components/AdminRoute";
 import AddProblem from "./page/AddProblem";
 import ProblemPage from "./page/ProblemPage";
 import Profile from "./page/Profile";
+import ComingSoon from "./components/ComingSoon";
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -97,6 +98,8 @@ const App = () => {
           path="/profile"
           element={authUser ? <Profile /> : <Navigate to="/login" />}
         />
+        <Route path="/sheets" element={<ComingSoon />} />
+        <Route path="/contests" element={<ComingSoon />} />
       </Routes>
     </div>
   );

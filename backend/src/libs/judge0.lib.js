@@ -1,5 +1,11 @@
 import axios from "axios";
 
+const headers = {
+  Authorization: `Bearer ${process.env.JUDGE0_API_KEY}`, 
+  "Content-Type": "application/json",
+  Accept: "application/json",
+};
+
 export const getJudge0LanguageId = (Language) => {
   const languageMap = {
     PYTHON: 71,
@@ -14,7 +20,8 @@ export const submitBatch = async (submissions) => {
     `${process.env.JUDGE0_API_URL}/submissions/batch?base64_encoded=false`,
     {
       submissions,
-    }
+    },
+    { headers }
   );
 
   console.log("submission Results", data);
