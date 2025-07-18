@@ -26,10 +26,6 @@ const Navbar = () => {
         <div className="absolute left-1/2 transform -translate-x-1/2 hidden md:flex items-center">
           {authUser ? (
             <div className="flex items-center gap-8">
-              <Link to="/problems" className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors">
-                <Code className="w-5 h-5 text-blue-400" />
-                <span className="font-medium">Problems</span>
-              </Link>
               <Link to="/contests" className="flex items-center gap-2 text-gray-300 hover:text-white transition-colors">
                 <Trophy className="w-5 h-5 text-yellow-400" />
                 <span className="font-medium">Contests</span>

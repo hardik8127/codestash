@@ -18,7 +18,7 @@ export const getStreakHeatmap = async (req, res) => {
 
     // Format them like GitHub-style graph: [{ date, count }]
     const result = streaks.map((streak) => ({
-      date: streak.date.toISOString().split("T")[0], // "YYYY-MM-DD"
+      date: streak.date.toISOString().split("T")[0], 
       count: streak.count,
     }));
 
