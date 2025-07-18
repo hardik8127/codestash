@@ -101,10 +101,14 @@ export const login = async (req, res) => {
       expiresIn: "24h",
     });
 
+    const isProduction = process.env.NODE_ENV === 'production';
+    // Log the environment detection
+    console.log('Environment check - NODE_ENV:', process.env.NODE_ENV, 'isProduction:', isProduction);
+    
     res.cookie("jwt", token, {
       httpOnly: true,
-      sameSite: "strict",
-      secure: process.env.NODE_ENV !== "development",
+      sameSite: isProduction ? 'none' : 'lax',
+      secure: isProduction,
       maxAge: 1000 * 60 * 60 * 24 * 7,
     });
 
@@ -127,10 +131,11 @@ export const login = async (req, res) => {
 };
 export const logout = async (req, res) => {
   try {
+    const isProduction = process.env.NODE_ENV === 'production';
     res.clearCookie("jwt", {
       httpOnly: true,
-      sameSite: "strict",
-      secure: process.env.NODE_ENV !== "development",
+      sameSite: isProduction ? 'none' : 'lax',
+      secure: isProduction,
     });
     res.status(200).json({
       success: true,
