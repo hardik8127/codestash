@@ -14,6 +14,7 @@ import discussionRouter from "./routes/discussion.route.js";
 dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
 app.use(cookieParser());
@@ -36,6 +37,6 @@ app.use("/api/v1/playlist", playlistRoutes);
 app.use("/api/v1/streak", streakRoutes);
 app.use("/api/v1/discussion", discussionRouter);
 
-app.listen(8080, () => {
+app.listen(PORT, () => {
   console.log("server is running on Port 8080");
 });
