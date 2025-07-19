@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { usePlaylistStore } from '../store/usePlaylistStore';
 import { Link } from 'react-router-dom';
 import { BookOpen, ChevronDown, ChevronUp, Clock, List, Tag, ExternalLink } from 'lucide-react';
+import CreatePlaylistModal from './CreatePlaylistModal';
 
 const PlaylistProfile = () => {
-  const { getAllPlaylists, playlists , deletePlaylist } = usePlaylistStore();
+  const { getAllPlaylists, playlists, deletePlaylist, createPlaylist } = usePlaylistStore();
   const [expandedPlaylist, setExpandedPlaylist] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     getAllPlaylists();
@@ -22,6 +24,13 @@ const PlaylistProfile = () => {
   const handleDelete = async (id) => {
     await deletePlaylist(id);
   };
+
+  const handleCreatePlaylist = async (data) => {
+    await createPlaylist(data);
+  };
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   const getDifficultyBadge = (difficulty) => {
     switch (difficulty) {
@@ -50,10 +59,17 @@ const PlaylistProfile = () => {
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-primary">My Playlists</h2>
-          <button className="btn btn-primary btn-sm">
+          <button className="btn btn-primary btn-sm" onClick={openModal}>
             Create Playlist
           </button>
         </div>
+
+        {/* Create Playlist Modal */}
+        <CreatePlaylistModal 
+          isOpen={isModalOpen} 
+          onClose={closeModal} 
+          onSubmit={handleCreatePlaylist} 
+        />
 
         {playlists.length === 0 ? (
           <div className="card bg-base-100 shadow-xl">
@@ -61,7 +77,7 @@ const PlaylistProfile = () => {
               <h3 className="text-xl font-medium">No playlists found</h3>
               <p className="text-base-content/70">Create your first playlist to organize problems!</p>
               <div className="card-actions justify-center mt-4">
-                <button className="btn btn-primary">Create Playlist</button>
+                <button className="btn btn-primary" onClick={openModal}>Create Playlist</button>
               </div>
             </div>
           </div>
@@ -140,7 +156,7 @@ const PlaylistProfile = () => {
                                   </td>
                                   <td className="text-right">
                                     <Link 
-                                      to={`/problem/${item.problem.id}`} 
+                                      to={`/problems/${item.problem.id}`} 
                                       className="btn btn-xs btn-outline btn-primary"
                                     >
                                       <ExternalLink size={12} />

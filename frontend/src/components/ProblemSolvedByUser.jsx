@@ -69,7 +69,6 @@ const ProblemSolvedByUser = () => {
                     <th className="bg-base-300">Problem</th>
                     <th className="bg-base-300">Difficulty</th>
                     <th className="bg-base-300">Tags</th>
-                    <th className="bg-base-300 text-center">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -87,17 +86,6 @@ const ProblemSolvedByUser = () => {
                           ))}
                         </div>
                       </td>
-                      <td className="text-center">
-                        <div className="flex justify-center">
-                          <Link 
-                            to={`/problems/${problem.id}`} 
-                            className="btn btn-sm btn-outline btn-primary"
-                          >
-                            <ExternalLink size={14} className="mr-1" />
-                            View
-                          </Link>
-                        </div>
-                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -109,7 +97,7 @@ const ProblemSolvedByUser = () => {
                 <span className="text-sm">
                   Total problems solved: <span className="font-bold">{solvedProblems.length}</span>
                 </span>
-                <Link to="/problems" className="btn btn-sm btn-primary">
+                <Link to="/home" className="btn btn-sm btn-primary">
                   Solve more problems
                 </Link>
               </div>
