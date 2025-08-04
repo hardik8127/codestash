@@ -103,11 +103,14 @@ export const login = async (req, res) => {
 
     const isProduction = process.env.NODE_ENV === 'production';
 
+    // Log the environment detection
+    console.log('Environment check - NODE_ENV:', process.env.NODE_ENV, 'isProduction:', isProduction);
+    
     const cookieOptions = {
       httpOnly: true,
       secure: isProduction,
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      sameSite: isProduction ? 'none' : 'strict',
+      sameSite: isProduction ? 'none' : 'lax',
     };
 
     res.cookie("jwt", token, cookieOptions);
@@ -136,7 +139,7 @@ export const logout = async (req, res) => {
     res.clearCookie("jwt", {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? 'none' : 'strict',
+      sameSite: isProduction ? 'none' : 'lax',
     });
     res.status(200).json({
       success: true,
@@ -380,11 +383,14 @@ export const googleAuth = async (req, res) => {
 
     const isProduction = process.env.NODE_ENV === 'production';
 
+    // Log the environment detection
+    console.log('Environment check - NODE_ENV:', process.env.NODE_ENV, 'isProduction:', isProduction);
+
     const cookieOptions = {
       httpOnly: true,
       secure: isProduction,
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      sameSite: isProduction ? 'none' : 'strict',
+      sameSite: isProduction ? 'none' : 'lax',
     };
 
     return res
