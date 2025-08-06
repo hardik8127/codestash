@@ -592,16 +592,16 @@ const CreateProblemForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#060606] text-white py-10">
+    <div className="min-h-screen bg-[#060606] text-white py-6 sm:py-10">
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header section with logo and title */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6 sm:mb-8">
           <div className="flex flex-col items-center gap-2">
-            <div className="w-14 h-14 rounded-lg bg-blue-500/20 flex items-center justify-center hover:bg-blue-500/30 transition-colors">
-              <Code className="w-7 h-7 text-blue-400" />
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-blue-500/20 flex items-center justify-center hover:bg-blue-500/30 transition-colors">
+              <Code className="w-6 h-6 sm:w-7 sm:h-7 text-blue-400" />
             </div>
-            <h1 className="text-3xl font-bold mt-3 text-white">Create Problem</h1>
-            <p className="text-gray-300">Add a new coding challenge to the platform</p>
+            <h1 className="text-2xl sm:text-3xl font-bold mt-3 text-white">Create Problem</h1>
+            <p className="text-gray-300 text-sm sm:text-base">Add a new coding challenge to the platform</p>
           </div>
         </div>
 
@@ -612,18 +612,18 @@ const CreateProblemForm = () => {
           <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-blue-600/5 rounded-full blur-xl"></div>
         </div>
 
-        <div className="backdrop-blur-sm bg-[#0a0a0a]/80 border border-gray-800 rounded-xl shadow-lg p-6 md:p-8 relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 pb-4 border-b border-gray-800">
-            <h2 className="text-xl md:text-2xl font-semibold flex items-center gap-3 text-white">
+        <div className="backdrop-blur-sm bg-[#0a0a0a]/80 border border-gray-800 rounded-xl shadow-lg p-4 sm:p-6 md:p-8 relative z-10">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6 pb-4 border-b border-gray-800 gap-4">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold flex items-center gap-3 text-white">
               <FileText className="w-5 h-5 md:w-6 md:h-6 text-blue-400" />
               Problem Details
             </h2>
 
-            <div className="flex flex-col md:flex-row gap-3 mt-4 md:mt-0">
-              <div className="join">
+            <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+              <div className="join w-full sm:w-auto">
                 <button
                   type="button"
-                  className={`btn join-item bg-[#121212] border-gray-700 text-gray-200 hover:bg-[#1a1a1a] ${
+                  className={`btn join-item bg-[#121212] border-gray-700 text-gray-200 hover:bg-[#1a1a1a] text-sm sm:text-base flex-1 sm:flex-none ${
                     sampleType === "DP" ? "bg-blue-600 hover:bg-blue-700 text-white border-transparent" : ""
                   }`}
                   onClick={() => setSampleType("DP")}
@@ -632,7 +632,7 @@ const CreateProblemForm = () => {
                 </button>
                 <button
                   type="button"
-                  className={`btn join-item bg-[#121212] border-gray-700 text-gray-200 hover:bg-[#1a1a1a] ${
+                  className={`btn join-item bg-[#121212] border-gray-700 text-gray-200 hover:bg-[#1a1a1a] text-sm sm:text-base flex-1 sm:flex-none ${
                     sampleType === "string" ? "bg-blue-600 hover:bg-blue-700 text-white border-transparent" : ""
                   }`}
                   onClick={() => setSampleType("string")}
@@ -642,7 +642,7 @@ const CreateProblemForm = () => {
               </div>
               <button
                 type="button"
-                className="btn bg-blue-600 hover:bg-blue-700 text-white border-transparent gap-2"
+                className="btn bg-blue-600 hover:bg-blue-700 text-white border-transparent gap-2 text-sm sm:text-base w-full sm:w-auto"
                 onClick={loadSampleData}
               >
                 <Download className="w-4 h-4" />
@@ -651,16 +651,16 @@ const CreateProblemForm = () => {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 sm:space-y-8">
             {/* Basic Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="form-control md:col-span-2">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+              <div className="form-control lg:col-span-2">
                 <label className="label">
-                  <span className="label-text font-medium text-gray-200">Title</span>
+                  <span className="label-text font-medium text-gray-200 text-sm sm:text-base">Title</span>
                 </label>
                 <input
                   type="text"
-                  className={`w-full bg-[#121212] border border-gray-800 rounded-lg py-3 px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors ${
+                  className={`w-full bg-[#121212] border border-gray-800 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors text-sm sm:text-base ${
                     errors.title ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                   }`}
                   {...register("title")}
@@ -671,12 +671,12 @@ const CreateProblemForm = () => {
                 )}
               </div>
 
-              <div className="form-control md:col-span-2">
+              <div className="form-control lg:col-span-2">
                 <label className="label">
-                  <span className="label-text font-medium text-gray-200">Description</span>
+                  <span className="label-text font-medium text-gray-200 text-sm sm:text-base">Description</span>
                 </label>
                 <textarea
-                  className={`w-full bg-[#121212] border border-gray-800 rounded-lg py-3 px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-32 resize-y ${
+                  className={`w-full bg-[#121212] border border-gray-800 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-24 sm:min-h-32 resize-y text-sm sm:text-base ${
                     errors.description ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                   }`}
                   {...register("description")}
@@ -687,12 +687,12 @@ const CreateProblemForm = () => {
                 )}
               </div>
 
-              <div className="form-control">
+              <div className="form-control lg:col-span-1">
                 <label className="label">
-                  <span className="label-text font-medium text-gray-200">Difficulty</span>
+                  <span className="label-text font-medium text-gray-200 text-sm sm:text-base">Difficulty</span>
                 </label>
                 <select
-                  className={`w-full bg-[#121212] border border-gray-800 rounded-lg py-3 px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors ${
+                  className={`w-full bg-[#121212] border border-gray-800 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors text-sm sm:text-base ${
                     errors.difficulty ? "border-red-500 focus:border-red-500 focus:ring-red-500" : ""
                   }`}
                   {...register("difficulty")}
@@ -708,26 +708,26 @@ const CreateProblemForm = () => {
             </div>
 
             {/* Tags */}
-            <div className="bg-[#0f0f0f] border border-gray-800 rounded-lg p-5 shadow-md">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-100">
-                  <BookOpen className="w-5 h-5 text-blue-400" />
+            <div className="bg-[#0f0f0f] border border-gray-800 rounded-lg p-4 sm:p-5 shadow-md">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4">
+                <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2 text-gray-100">
+                  <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
                   Tags
                 </h3>
                 <button
                   type="button"
-                  className="btn btn-sm bg-blue-600 hover:bg-blue-700 text-white border-transparent"
+                  className="btn btn-sm bg-blue-600 hover:bg-blue-700 text-white border-transparent w-full sm:w-auto"
                   onClick={() => appendTag("")}
                 >
                   <Plus className="w-4 h-4 mr-1" /> Add Tag
                 </button>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {tagFields.map((field, index) => (
                   <div key={field.id} className="flex gap-2 items-center">
                     <input
                       type="text"
-                      className={`w-full bg-[#121212] border border-gray-800 rounded-lg py-2 px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors ${
+                      className={`w-full bg-[#121212] border border-gray-800 rounded-lg py-2 px-3 sm:px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors text-sm sm:text-base ${
                         errors.tags?.[index] ? "border-red-500" : ""
                       }`}
                       {...register(`tags.${index}`)}
@@ -735,11 +735,11 @@ const CreateProblemForm = () => {
                     />
                     <button
                       type="button"
-                      className="btn btn-square btn-sm bg-[#121212] border border-gray-700 hover:bg-red-900/20 hover:border-red-800"
+                      className="btn btn-square btn-sm bg-[#121212] border border-gray-700 hover:bg-red-900/20 hover:border-red-800 flex-shrink-0"
                       onClick={() => removeTag(index)}
                       disabled={tagFields.length === 1}
                     >
-                      <Trash2 className="w-4 h-4 text-red-400" />
+                      <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 text-red-400" />
                     </button>
                   </div>
                 ))}
@@ -752,41 +752,41 @@ const CreateProblemForm = () => {
             </div>
 
             {/* Test Cases */}
-            <div className="bg-[#0f0f0f] border border-gray-800 rounded-lg p-5 shadow-md">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-lg font-semibold flex items-center gap-2 text-gray-100">
-                  <CheckCircle2 className="w-5 h-5 text-blue-400" />
+            <div className="bg-[#0f0f0f] border border-gray-800 rounded-lg p-4 sm:p-5 shadow-md">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-6">
+                <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2 text-gray-100">
+                  <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
                   Test Cases
                 </h3>
                 <button
                   type="button"
-                  className="btn btn-sm bg-blue-600 hover:bg-blue-700 text-white border-transparent"
+                  className="btn btn-sm bg-blue-600 hover:bg-blue-700 text-white border-transparent w-full sm:w-auto"
                   onClick={() => appendTestCase({ input: "", output: "" })}
                 >
                   <Plus className="w-4 h-4 mr-1" /> Add Test Case
                 </button>
               </div>
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {testCaseFields.map((field, index) => (
                   <div key={field.id} className="bg-[#121212] border border-gray-800 rounded-lg shadow-md overflow-hidden">
-                    <div className="bg-[#0c0c0c] px-4 py-3 border-b border-gray-800 flex justify-between items-center">
-                      <h4 className="font-semibold text-gray-200">Test Case #{index + 1}</h4>
+                    <div className="bg-[#0c0c0c] px-3 sm:px-4 py-3 border-b border-gray-800 flex justify-between items-center">
+                      <h4 className="font-semibold text-gray-200 text-sm sm:text-base">Test Case #{index + 1}</h4>
                       <button
                         type="button"
-                        className="btn btn-sm bg-transparent border-none hover:bg-red-900/20 text-red-400"
+                        className="btn btn-sm bg-transparent border-none hover:bg-red-900/20 text-red-400 text-xs sm:text-sm"
                         onClick={() => removeTestCase(index)}
                         disabled={testCaseFields.length === 1}
                       >
-                        <Trash2 className="w-4 h-4 mr-1" /> Remove
+                        <Trash2 className="w-3 h-3 sm:w-4 sm:h-4 mr-1" /> Remove
                       </button>
                     </div>
-                    <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-3 sm:p-4 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                       <div className="form-control">
                         <label className="label">
-                          <span className="label-text font-medium text-gray-300">Input</span>
+                          <span className="label-text font-medium text-gray-300 text-sm">Input</span>
                         </label>
                         <textarea
-                          className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 px-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-24 resize-y ${
+                          className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 px-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-20 sm:min-h-24 resize-y text-sm ${
                             errors.testcases?.[index]?.input ? "border-red-500" : ""
                           }`}
                           {...register(`testcases.${index}.input`)}
@@ -798,10 +798,10 @@ const CreateProblemForm = () => {
                       </div>
                       <div className="form-control">
                         <label className="label">
-                          <span className="label-text font-medium text-gray-300">Expected Output</span>
+                          <span className="label-text font-medium text-gray-300 text-sm">Expected Output</span>
                         </label>
                         <textarea
-                          className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 px-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-24 resize-y ${
+                          className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 px-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-20 sm:min-h-24 resize-y text-sm ${
                             errors.testcases?.[index]?.output ? "border-red-500" : ""
                           }`}
                           {...register(`testcases.${index}.output`)}
@@ -823,42 +823,43 @@ const CreateProblemForm = () => {
             </div>
 
             {/* Code Editor Sections */}
-            <div className="space-y-8">
+            <div className="space-y-6 sm:space-y-8">
               {["JAVASCRIPT", "PYTHON", "JAVA"].map((language) => (
                 <div
                   key={language}
-                  className="bg-[#0f0f0f] border border-gray-800 rounded-lg p-5 shadow-md"
+                  className="bg-[#0f0f0f] border border-gray-800 rounded-lg p-4 sm:p-5 shadow-md"
                 >
-                  <h3 className="text-lg font-semibold mb-6 flex items-center gap-2 text-gray-100">
-                    <Code2 className="w-5 h-5 text-blue-400" />
+                  <h3 className="text-base sm:text-lg font-semibold mb-4 sm:mb-6 flex items-center gap-2 text-gray-100">
+                    <Code2 className="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" />
                     {language}
                   </h3>
 
-                  <div className="space-y-6">
+                  <div className="space-y-4 sm:space-y-6">
                     {/* Starter Code */}
                     <div className="bg-[#121212] border border-gray-800 rounded-lg shadow-md overflow-hidden">
-                      <div className="bg-[#0c0c0c] px-4 py-3 border-b border-gray-800">
-                        <h4 className="font-semibold text-gray-200">Starter Code Template</h4>
+                      <div className="bg-[#0c0c0c] px-3 sm:px-4 py-3 border-b border-gray-800">
+                        <h4 className="font-semibold text-gray-200 text-sm sm:text-base">Starter Code Template</h4>
                       </div>
-                      <div className="p-4">
+                      <div className="p-3 sm:p-4">
                         <div className="border border-gray-700 rounded-md overflow-hidden">
                           <Controller
                             name={`codeSnippets.${language}`}
                             control={control}
                             render={({ field }) => (
                               <Editor
-                                height="300px"
+                                height="250px"
                                 language={language.toLowerCase()}
                                 theme="vs-dark"
                                 value={field.value}
                                 onChange={field.onChange}
                                 options={{
                                   minimap: { enabled: false },
-                                  fontSize: 14,
+                                  fontSize: 12,
                                   lineNumbers: "on",
                                   roundedSelection: false,
                                   scrollBeyondLastLine: false,
                                   automaticLayout: true,
+                                  wordWrap: "on",
                                 }}
                               />
                             )}
@@ -874,31 +875,32 @@ const CreateProblemForm = () => {
 
                     {/* Reference Solution */}
                     <div className="bg-[#121212] border border-gray-800 rounded-lg shadow-md overflow-hidden">
-                      <div className="bg-[#0c0c0c] px-4 py-3 border-b border-gray-800">
-                        <h4 className="font-semibold text-gray-200 flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-green-400" />
+                      <div className="bg-[#0c0c0c] px-3 sm:px-4 py-3 border-b border-gray-800">
+                        <h4 className="font-semibold text-gray-200 flex items-center gap-2 text-sm sm:text-base">
+                          <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4 text-green-400" />
                           Reference Solution
                         </h4>
                       </div>
-                      <div className="p-4">
+                      <div className="p-3 sm:p-4">
                         <div className="border border-gray-700 rounded-md overflow-hidden">
                           <Controller
                             name={`referenceSolutions.${language}`}
                             control={control}
                             render={({ field }) => (
                               <Editor
-                                height="300px"
+                                height="250px"
                                 language={language.toLowerCase()}
                                 theme="vs-dark"
                                 value={field.value}
                                 onChange={field.onChange}
                                 options={{
                                   minimap: { enabled: false },
-                                  fontSize: 14,
+                                  fontSize: 12,
                                   lineNumbers: "on",
                                   roundedSelection: false,
                                   scrollBeyondLastLine: false,
                                   automaticLayout: true,
+                                  wordWrap: "on",
                                 }}
                               />
                             )}
@@ -914,17 +916,17 @@ const CreateProblemForm = () => {
 
                     {/* Examples */}
                     <div className="bg-[#121212] border border-gray-800 rounded-lg shadow-md overflow-hidden">
-                      <div className="bg-[#0c0c0c] px-4 py-3 border-b border-gray-800">
-                        <h4 className="font-semibold text-gray-200">Example</h4>
+                      <div className="bg-[#0c0c0c] px-3 sm:px-4 py-3 border-b border-gray-800">
+                        <h4 className="font-semibold text-gray-200 text-sm sm:text-base">Example</h4>
                       </div>
-                      <div className="p-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="p-3 sm:p-4">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
                           <div className="form-control">
                             <label className="label">
-                              <span className="label-text font-medium text-gray-300">Input</span>
+                              <span className="label-text font-medium text-gray-300 text-sm">Input</span>
                             </label>
                             <textarea
-                              className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 px-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-20 resize-y ${
+                              className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 px-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-16 sm:min-h-20 resize-y text-sm ${
                                 errors.examples?.[language]?.input ? "border-red-500" : ""
                               }`}
                               {...register(`examples.${language}.input`)}
@@ -936,10 +938,10 @@ const CreateProblemForm = () => {
                           </div>
                           <div className="form-control">
                             <label className="label">
-                              <span className="label-text font-medium text-gray-300">Output</span>
+                              <span className="label-text font-medium text-gray-300 text-sm">Output</span>
                             </label>
                             <textarea
-                              className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 px-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-20 resize-y ${
+                              className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 px-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-16 sm:min-h-20 resize-y text-sm ${
                                 errors.examples?.[language]?.output ? "border-red-500" : ""
                               }`}
                               {...register(`examples.${language}.output`)}
@@ -949,12 +951,12 @@ const CreateProblemForm = () => {
                               <p className="text-red-400 text-sm mt-1">{errors.examples[language].output.message}</p>
                             )}
                           </div>
-                          <div className="form-control md:col-span-2">
+                          <div className="form-control lg:col-span-2">
                             <label className="label">
-                              <span className="label-text font-medium text-gray-300">Explanation</span>
+                              <span className="label-text font-medium text-gray-300 text-sm">Explanation</span>
                             </label>
                             <textarea
-                              className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 px-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-24 resize-y`}
+                              className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 px-3 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-20 sm:min-h-24 resize-y text-sm`}
                               {...register(`examples.${language}.explanation`)}
                               placeholder="Explain the example"
                             />
@@ -968,18 +970,18 @@ const CreateProblemForm = () => {
             </div>
 
             {/* Additional Information */}
-            <div className="bg-[#0f0f0f] border border-gray-800 rounded-lg p-5 shadow-md">
-              <h3 className="text-lg font-semibold mb-6 flex items-center gap-2 text-gray-100">
-                <Lightbulb className="w-5 h-5 text-yellow-400" />
+            <div className="bg-[#0f0f0f] border border-gray-800 rounded-lg p-4 sm:p-5 shadow-md">
+              <h3 className="text-base sm:text-lg font-semibold mb-4 sm:mb-6 flex items-center gap-2 text-gray-100">
+                <Lightbulb className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" />
                 Additional Information
               </h3>
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-medium text-gray-300">Constraints</span>
+                    <span className="label-text font-medium text-gray-300 text-sm sm:text-base">Constraints</span>
                   </label>
                   <textarea
-                    className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-3 px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-24 resize-y ${
+                    className={`w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-20 sm:min-h-24 resize-y text-sm sm:text-base ${
                       errors.constraints ? "border-red-500" : ""
                     }`}
                     {...register("constraints")}
@@ -991,20 +993,20 @@ const CreateProblemForm = () => {
                 </div>
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-medium text-gray-300">Hints (Optional)</span>
+                    <span className="label-text font-medium text-gray-300 text-sm sm:text-base">Hints (Optional)</span>
                   </label>
                   <textarea
-                    className="w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-3 px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-24 resize-y"
+                    className="w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-20 sm:min-h-24 resize-y text-sm sm:text-base"
                     {...register("hints")}
                     placeholder="Enter hints for solving the problem"
                   />
                 </div>
                 <div className="form-control">
                   <label className="label">
-                    <span className="label-text font-medium text-gray-300">Editorial (Optional)</span>
+                    <span className="label-text font-medium text-gray-300 text-sm sm:text-base">Editorial (Optional)</span>
                   </label>
                   <textarea
-                    className="w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-3 px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-32 resize-y"
+                    className="w-full bg-[#0a0a0a] border border-gray-800 rounded-lg py-2 sm:py-3 px-3 sm:px-4 text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors min-h-24 sm:min-h-32 resize-y text-sm sm:text-base"
                     {...register("editorial")}
                     placeholder="Enter problem editorial/solution explanation"
                   />
@@ -1012,20 +1014,20 @@ const CreateProblemForm = () => {
               </div>
             </div>
 
-            <div className="pt-6 border-t border-gray-800 flex justify-end">
+            <div className="pt-4 sm:pt-6 border-t border-gray-800 flex justify-end">
               <button 
                 type="submit" 
-                className="w-full md:w-auto px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full lg:w-auto px-6 sm:px-8 py-2 sm:py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 shadow-md hover:shadow-lg disabled:opacity-70 disabled:cursor-not-allowed text-sm sm:text-base"
                 disabled={isLoading}
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="h-5 w-5 animate-spin mr-2 inline" />
+                    <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin mr-2 inline" />
                     Creating Problem...
                   </>
                 ) : (
                   <>
-                    <CheckCircle2 className="w-5 h-5 mr-2 inline" />
+                    <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 mr-2 inline" />
                     Create Problem
                   </>
                 )}

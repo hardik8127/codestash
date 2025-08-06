@@ -89,25 +89,25 @@ const ProblemsTable = ({ problems }) => {
 
   return (
     <motion.div 
-      className="w-full max-w-5xl mx-auto"
+      className="w-full max-w-5xl mx-auto px-4 sm:px-6"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
       {/* Header Section */}
       <motion.div 
-        className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/30 rounded-t-xl p-6 shadow-lg"
+        className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/30 rounded-t-xl p-4 sm:p-6 shadow-lg"
         variants={itemVariants}
       >
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
             <h2 className="text-2xl font-bold text-white">Problems</h2>
-            <div className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm font-medium border border-blue-500/30">
+            <div className="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm font-medium border border-blue-500/30 w-fit">
               {filteredProblems.length} available
             </div>
           </div>
           <motion.button
-            className="px-6 py-2 bg-blue-600 rounded-md font-medium text-white flex items-center gap-2 hover:bg-blue-700 transition-all"
+            className="px-6 py-2 bg-blue-600 rounded-md font-medium text-white flex items-center justify-center gap-2 hover:bg-blue-700 transition-all w-full sm:w-auto"
             onClick={() => setIsCreateModalOpen(true)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -118,7 +118,7 @@ const ProblemsTable = ({ problems }) => {
         </div>
 
         {/* Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <input
             type="text"
             placeholder="Search by title..."
@@ -139,7 +139,7 @@ const ProblemsTable = ({ problems }) => {
             ))}
           </select>
           <select
-            className="px-4 py-2 bg-gray-900/50 border border-gray-700/30 rounded-md text-white focus:outline-none focus:border-blue-500 transition-colors"
+            className="px-4 py-2 bg-gray-900/50 border border-gray-700/30 rounded-md text-white focus:outline-none focus:border-blue-500 transition-colors sm:col-span-2 lg:col-span-1"
             value={selectedTag}
             onChange={(e) => setSelectedTag(e.target.value)}
           >
@@ -162,11 +162,11 @@ const ProblemsTable = ({ problems }) => {
           <table className="w-full">
             <thead className="bg-gray-900/50 border-b border-gray-700/30">
               <tr>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Status</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Title</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300 hidden md:table-cell">Tags</th>
-                <th className="px-6 py-4 text-center text-sm font-semibold text-gray-300">Difficulty</th>
-                <th className="px-6 py-4 text-center text-sm font-semibold text-gray-300">Actions</th>
+                <th className="px-3 sm:px-6 py-4 text-left text-sm font-semibold text-gray-300">Status</th>
+                <th className="px-3 sm:px-6 py-4 text-left text-sm font-semibold text-gray-300">Title</th>
+                <th className="px-3 sm:px-6 py-4 text-left text-sm font-semibold text-gray-300 hidden lg:table-cell">Tags</th>
+                <th className="px-3 sm:px-6 py-4 text-center text-sm font-semibold text-gray-300 hidden sm:table-cell">Difficulty</th>
+                <th className="px-3 sm:px-6 py-4 text-center text-sm font-semibold text-gray-300">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -181,7 +181,7 @@ const ProblemsTable = ({ problems }) => {
                       className="border-b border-gray-700/50 hover:bg-gray-700/30 transition-colors"
                       variants={itemVariants}
                     >
-                      <td className="px-6 py-4">
+                      <td className="px-3 sm:px-6 py-4">
                         <div className="flex items-center justify-center w-6 h-6">
                           {isSolved ? (
                             <CheckCircle className="w-5 h-5 text-blue-400" />
@@ -190,12 +190,26 @@ const ProblemsTable = ({ problems }) => {
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4">
-                        <Link to={`/problem/${problem.id}`} className="font-semibold text-white hover:text-blue-400 transition-colors">
+                      <td className="px-3 sm:px-6 py-4">
+                        <Link to={`/problem/${problem.id}`} className="font-semibold text-white hover:text-blue-400 transition-colors text-sm sm:text-base">
                           {problem.title}
                         </Link>
+                        {/* Show difficulty on mobile under title */}
+                        <div className="sm:hidden mt-1">
+                          <span
+                            className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                              problem.difficulty === "EASY"
+                                ? "bg-green-500/20 text-green-400 border border-green-500/30"
+                                : problem.difficulty === "MEDIUM"
+                                ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
+                                : "bg-red-500/20 text-red-400 border border-red-500/30"
+                            }`}
+                          >
+                            {problem.difficulty}
+                          </span>
+                        </div>
                       </td>
-                      <td className="px-6 py-4 hidden md:table-cell">
+                      <td className="px-3 sm:px-6 py-4 hidden lg:table-cell">
                         <div className="flex flex-wrap gap-1">
                           {(problem.tags || []).map((tag, idx) => (
                             <span
@@ -207,7 +221,7 @@ const ProblemsTable = ({ problems }) => {
                           ))}
                         </div>
                       </td>
-                      <td className="px-6 py-4 text-center">
+                      <td className="px-3 sm:px-6 py-4 text-center hidden sm:table-cell">
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-semibold ${
                             problem.difficulty === "EASY"
@@ -220,26 +234,31 @@ const ProblemsTable = ({ problems }) => {
                           {problem.difficulty}
                         </span>
                       </td>
-                      <td className="px-6 py-4">
-                        <div className="flex justify-center gap-2">
+                      <td className="px-3 sm:px-6 py-4">
+                        <div className="flex justify-center gap-1 sm:gap-2">
                           {authUser?.role === "ADMIN" && (
-                            <div className="flex gap-2">
+                            <div className="flex gap-1 sm:gap-2">
                               <button
                                 onClick={() => handleDelete(problem.id)}
-                                className="p-2 bg-red-500/20 text-red-400 rounded border border-red-500/30 hover:bg-red-500/30 transition-colors"
+                                className="p-1.5 sm:p-2 bg-red-500/20 text-red-400 rounded border border-red-500/30 hover:bg-red-500/30 transition-colors"
+                                title="Delete problem"
                               >
-                                <TrashIcon className="w-4 h-4" />
+                                <TrashIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                               </button>
-                              <button className="p-2 bg-gray-500/20 text-gray-400 rounded border border-gray-500/30">
-                                <PencilIcon className="w-4 h-4" />
+                              <button 
+                                className="p-1.5 sm:p-2 bg-gray-500/20 text-gray-400 rounded border border-gray-500/30"
+                                title="Edit problem"
+                              >
+                                <PencilIcon className="w-3 h-3 sm:w-4 sm:h-4" />
                               </button>
                             </div>
                           )}
                           <button
-                            className="p-2 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30 hover:bg-blue-500/30 transition-colors flex items-center gap-2"
+                            className="p-1.5 sm:p-2 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30 hover:bg-blue-500/30 transition-colors flex items-center gap-1 sm:gap-2"
                             onClick={() => handleAddToPlaylist(problem.id)}
+                            title="Add to playlist"
                           >
-                            <Bookmark className="w-4 h-4" />
+                            <Bookmark className="w-3 h-3 sm:w-4 sm:h-4" />
                           </button>
                         </div>
                       </td>
@@ -248,7 +267,7 @@ const ProblemsTable = ({ problems }) => {
                 })
               ) : (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center">
+                  <td colSpan={5} className="px-3 sm:px-6 py-12 text-center">
                     <div className="flex flex-col items-center gap-3">
                       <div className="w-16 h-16 bg-blue-500/10 rounded-full flex items-center justify-center">
                         <Code className="w-8 h-8 text-blue-400" />
@@ -267,25 +286,25 @@ const ProblemsTable = ({ problems }) => {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex justify-between items-center p-4 border-t border-gray-700/30 bg-gray-900/30">
-            <div className="text-sm text-gray-400">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 p-4 border-t border-gray-700/30 bg-gray-900/30">
+            <div className="text-sm text-gray-400 text-center sm:text-left">
               Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
               {Math.min(currentPage * itemsPerPage, filteredProblems.length)} of{" "}
               {filteredProblems.length} problems
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 justify-center sm:justify-end">
               <button
-                className="px-3 py-1 bg-gray-700/50 text-gray-300 rounded border border-gray-700/30 hover:bg-gray-600/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-1 bg-gray-700/50 text-gray-300 rounded border border-gray-700/30 hover:bg-gray-600/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage((prev) => prev - 1)}
               >
                 Prev
               </button>
-              <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30">
+              <span className="px-3 py-1 bg-blue-500/20 text-blue-400 rounded border border-blue-500/30 text-sm">
                 {currentPage} / {totalPages}
               </span>
               <button
-                className="px-3 py-1 bg-gray-700/50 text-gray-300 rounded border border-gray-700/30 hover:bg-gray-600/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-1 bg-gray-700/50 text-gray-300 rounded border border-gray-700/30 hover:bg-gray-600/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage((prev) => prev + 1)}
               >

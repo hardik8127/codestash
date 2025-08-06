@@ -51,21 +51,21 @@ const HomePage = () => {
       </div>
 
       {/* Hero Section */}
-      <motion.div className="relative z-10 flex flex-col items-center pt-20 pb-12 px-6" variants={containerVariants}>
+      <motion.div className="relative z-10 flex flex-col items-center pt-12 sm:pt-20 pb-8 sm:pb-12 px-4 sm:px-6" variants={containerVariants}>
         <motion.div className="text-center w-full mx-auto" variants={itemVariants}>
-          <motion.h1 className="text-5xl md:text-6xl font-bold text-white mb-6 relative" variants={itemVariants}>
+          <motion.h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white mb-6 relative" variants={itemVariants}>
             Welcome to <span className="text-blue-400">CodeStash</span>
-            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-blue-500/40 rounded-full"></div>
+            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 sm:w-24 h-1 bg-blue-500/40 rounded-full"></div>
           </motion.h1>
 
-          <motion.p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-4xl mx-auto mb-12" variants={itemVariants}>
+          <motion.p className="text-lg sm:text-xl md:text-2xl text-gray-300 leading-relaxed max-w-4xl mx-auto mb-8 sm:mb-12 px-4" variants={itemVariants}>
             A Platform Inspired by Leetcode which helps you to prepare for coding
             interviews and helps you to improve your coding skills by solving coding
             problems
           </motion.p>
 
           {/* Feature Highlights */}
-          <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-4xl mx-auto" variants={containerVariants}>
+          <motion.div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-12 max-w-4xl mx-auto" variants={containerVariants}>
             <motion.div 
               className="flex items-center gap-3 bg-gray-800/40 border border-gray-700/30 rounded-lg p-4 hover:bg-gray-700/30 transition-colors shadow-md"
               variants={itemVariants}
@@ -112,7 +112,7 @@ const HomePage = () => {
       </motion.div>
 
       {/* Problems Section */}
-      <motion.div className="relative z-10 px-6 pb-12" variants={containerVariants}>
+      <motion.div className="relative z-10 px-4 sm:px-6 pb-8 sm:pb-12" variants={containerVariants}>
         {problems.length > 0 ? (
           <ProblemTable problems={problems} />
         ) : (
