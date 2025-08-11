@@ -126,4 +126,19 @@ export const useAuthStore = create((set) => ({
       throw error;
     }
   },
+
+  changePassword: async (currentPassword, newPassword) => {
+    try {
+      const res = await axiosInstance.post("/auth/change-password", {
+        currentPassword,
+        newPassword,
+      });
+      toast.success(res.data.message || "Password changed successfully");
+      return res.data;
+    } catch (error) {
+      console.log("Error changing password", error);
+      toast.error(error.response?.data?.message || "Error changing password");
+      throw error;
+    }
+  },
 }));

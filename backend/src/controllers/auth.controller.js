@@ -79,6 +79,7 @@ export const register = async (req, res) => {
         name: newUser.name,
         role: newUser.role,
         image: newUser.image,
+        googleId: newUser.googleId,
       },
     });
   } catch (error) {
@@ -152,6 +153,7 @@ export const login = async (req, res) => {
         name: user.name,
         role: user.role,
         image: user.image,
+        googleId: user.googleId,
       },
     });
   } catch (error) {
@@ -430,6 +432,7 @@ export const googleAuth = async (req, res) => {
           name: user.name,
           role: user.role,
           image: user.image,
+          googleId: user.googleId,
         },
       });
   } catch (error) {
@@ -437,6 +440,79 @@ export const googleAuth = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: 'Google login failed',
+    });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  const userId = req.user.id;
+
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({
+      message: "Current password and new password are required",
+    });
+  }
+
+  // Validate new password
+  const passwordValidation = validatePassword(newPassword);
+  if (!passwordValidation.isValid) {
+    return res.status(400).json({
+      message: passwordValidation.errors[0],
+    });
+  }
+
+  try {
+    // Get user from database
+    const user = await db.User.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+
+    // Check if user has a password (not a Google user)
+    if (!user.password || user.password === '') {
+      return res.status(400).json({
+        message: "Cannot change password for Google sign-in accounts",
+      });
+    }
+
+    // Check if current password is correct
+    const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password);
+    if (!isCurrentPasswordValid) {
+      return res.status(400).json({
+        message: "Current password is incorrect",
+      });
+    }
+
+    // Check if new password is different from current password
+    const isSamePassword = await bcrypt.compare(newPassword, user.password);
+    if (isSamePassword) {
+      return res.status(400).json({
+        message: "New password must be different from current password",
+      });
+    }
+
+    // Hash new password
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update password in database
+    await db.User.update({
+      where: { id: userId },
+      data: { password: hashedNewPassword },
+    });
+
+    res.status(200).json({
+      message: "Password changed successfully",
+    });
+  } catch (error) {
+    console.error("Error changing password:", error);
+    res.status(500).json({
+      message: "Error changing password",
     });
   }
 };

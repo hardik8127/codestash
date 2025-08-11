@@ -27,6 +27,7 @@ export const authMiddleware = async (req, res, next) => {
         name: true,
         role: true,
         image: true,
+        googleId: true,
       },
     });
     if (!user) {

@@ -8,6 +8,7 @@ import {
   register,
   resetPassword,
   verifyUser,
+  changePassword,
 } from "../controllers/auth.controller.js";
 import { authMiddleware } from "../middleware/auth.middleware.js";
 
@@ -20,6 +21,7 @@ authRoutes.post("/logout", authMiddleware, logout);
 authRoutes.post("/forgot-password", forgotPassword);
 authRoutes.post("/reset/:resetPassToken", resetPassword);
 authRoutes.post("/google-login", googleAuth);
+authRoutes.post("/change-password", authMiddleware, changePassword);
 authRoutes.get("/check", authMiddleware, check);
 
 export default authRoutes;

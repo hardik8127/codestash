@@ -6,11 +6,13 @@ import ProfileSubmission from "../components/ProfileSubmission";
 import ProblemSolvedByUser from "../components/ProblemSolvedByUser";
 import PlaylistProfile from "../components/PlaylistProfile";
 import StreakCalendar from "../components/StreakCalendar";
+import ChangePasswordModal from "../components/ChangePasswordModal";
 import { motion } from "framer-motion";
 
 const Profile = () => {
   const { authUser } = useAuthStore();
   const [activeTab, setActiveTab] = useState("submissions");
+  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false);
   
   // Animation variants
   const containerVariants = {
@@ -143,13 +145,17 @@ const Profile = () => {
                 >
                   Edit Profile
                 </motion.button>
-                <motion.button 
-                  className="px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 border-0 text-white rounded-md text-sm font-medium shadow-md transition-colors"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Change Password
-                </motion.button>
+                {/* Only show Change Password for non-Google users */}
+                {!authUser?.googleId && (
+                  <motion.button 
+                    className="px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 border-0 text-white rounded-md text-sm font-medium shadow-md transition-colors"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setIsChangePasswordModalOpen(true)}
+                  >
+                    Change Password
+                  </motion.button>
+                )}
               </div>
             </div>
           </motion.div>
@@ -277,6 +283,12 @@ const Profile = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Change Password Modal */}
+      <ChangePasswordModal
+        isOpen={isChangePasswordModalOpen}
+        onClose={() => setIsChangePasswordModalOpen(false)}
+      />
     </motion.div>
   );
 };
