@@ -9,7 +9,9 @@ import {
   Loader2,
   Lock,
   Mail,
-  User
+  User,
+  Check,
+  X
 } from "lucide-react";
 
 import {z} from "zod";
@@ -18,14 +20,34 @@ import { useAuthStore } from "../store/useAuthStore";
 import GoogleLoginButton from '../components/GoogleLoginButton';
 
 const SignUpSchema = z.object({
-  email:z.string().email("Enter a valid email"),
-  password:z.string().min(6 , "Password must be atleast of 6 characters"),
-  name:z.string().min(3 , "Name must be atleast 3 character")
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Please enter a valid email address")
+    .refine((email) => {
+      // Additional email validation
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      return emailRegex.test(email);
+    }, "Please enter a valid email address"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters long")
+    .refine((password) => /[A-Z]/.test(password), {
+      message: "Password must contain at least one uppercase letter"
+    })
+    .refine((password) => /[0-9]/.test(password), {
+      message: "Password must contain at least one number"
+    })
+    .refine((password) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password), {
+      message: "Password must contain at least one special character"
+    }),
+  name: z.string().min(3, "Name must be at least 3 characters")
 })
 
 const SignUpPage = () => {
 
   const [showPassword , setShowPassword] = useState(false);
+  const [passwordValue, setPasswordValue] = useState("");
 
   const {signup , isSigninUp} = useAuthStore()
   const navigate = useNavigate();
@@ -34,9 +56,25 @@ const SignUpPage = () => {
     register,
     handleSubmit,
     formState:{errors},
+    watch
   } = useForm({
     resolver:zodResolver(SignUpSchema)
   })
+
+  // Watch password field for real-time validation feedback
+  const watchedPassword = watch("password", "");
+
+  // Password requirements checker
+  const getPasswordRequirements = (password) => {
+    return {
+      minLength: password.length >= 8,
+      hasUppercase: /[A-Z]/.test(password),
+      hasNumber: /[0-9]/.test(password),
+      hasSpecialChar: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+    };
+  };
+
+  const passwordRequirements = getPasswordRequirements(watchedPassword);
 
   const onSubmit = async (data)=>{
    try {
@@ -152,6 +190,53 @@ const SignUpPage = () => {
               {errors.password && (
                 <p className="text-red-400 text-sm mt-1.5 ml-1">{errors.password.message}</p>
               )}
+              
+              {/* Password Requirements */}
+              <div className="mt-3 p-3 bg-[#0f0f0f] border border-gray-800 rounded-lg">
+                <p className="text-gray-300 text-sm font-medium mb-2">Password Requirements:</p>
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    {passwordRequirements.minLength ? (
+                      <Check className="h-4 w-4 text-green-400" />
+                    ) : (
+                      <X className="h-4 w-4 text-gray-500" />
+                    )}
+                    <span className={`text-sm ${passwordRequirements.minLength ? 'text-green-400' : 'text-gray-400'}`}>
+                      At least 8 characters
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {passwordRequirements.hasUppercase ? (
+                      <Check className="h-4 w-4 text-green-400" />
+                    ) : (
+                      <X className="h-4 w-4 text-gray-500" />
+                    )}
+                    <span className={`text-sm ${passwordRequirements.hasUppercase ? 'text-green-400' : 'text-gray-400'}`}>
+                      One uppercase letter
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {passwordRequirements.hasNumber ? (
+                      <Check className="h-4 w-4 text-green-400" />
+                    ) : (
+                      <X className="h-4 w-4 text-gray-500" />
+                    )}
+                    <span className={`text-sm ${passwordRequirements.hasNumber ? 'text-green-400' : 'text-gray-400'}`}>
+                      One number
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {passwordRequirements.hasSpecialChar ? (
+                      <Check className="h-4 w-4 text-green-400" />
+                    ) : (
+                      <X className="h-4 w-4 text-gray-500" />
+                    )}
+                    <span className={`text-sm ${passwordRequirements.hasSpecialChar ? 'text-green-400' : 'text-gray-400'}`}>
+                      One special character
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Submit Button */}

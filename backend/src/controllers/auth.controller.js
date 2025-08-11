@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { sendVerificationEmail, sendPasswordResetEmail } from "../libs/email.js";
 import { OAuth2Client } from "google-auth-library";
+import { validateEmail, validatePassword, validateName } from "../utils/validation.js";
 
 // Initialize Google OAuth client
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -16,6 +17,30 @@ export const register = async (req, res) => {
       message: " All fields are required",
     });
   }
+
+  // Validate email
+  if (!validateEmail(email)) {
+    return res.status(400).json({
+      message: "Please enter a valid email address",
+    });
+  }
+
+  // Validate password
+  const passwordValidation = validatePassword(password);
+  if (!passwordValidation.isValid) {
+    return res.status(400).json({
+      message: passwordValidation.errors[0], // Return first error
+    });
+  }
+
+  // Validate name
+  const nameValidation = validateName(name);
+  if (!nameValidation.isValid) {
+    return res.status(400).json({
+      message: nameValidation.error,
+    });
+  }
+
   try {
     const existingUser = await db.User.findUnique({
       where: { email },
@@ -68,6 +93,13 @@ export const login = async (req, res) => {
   if (!email || !password) {
     return res.status(400).json({
       message: " All Fields are required",
+    });
+  }
+
+  // Validate email format
+  if (!validateEmail(email)) {
+    return res.status(400).json({
+      message: "Please enter a valid email address",
     });
   }
 

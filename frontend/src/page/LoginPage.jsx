@@ -18,9 +18,27 @@ import GoogleLoginButton from '../components/GoogleLoginButton';
 
 
 const LoginSchema = z.object({
-  email:z.string().email("Enter a valid email"),
-  password:z.string().min(6 , "Password must be atleast of 6 characters"),
-
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Please enter a valid email address")
+    .refine((email) => {
+      // Additional email validation
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      return emailRegex.test(email);
+    }, "Please enter a valid email address"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters long")
+    .refine((password) => /[A-Z]/.test(password), {
+      message: "Password must contain at least one uppercase letter"
+    })
+    .refine((password) => /[0-9]/.test(password), {
+      message: "Password must contain at least one number"
+    })
+    .refine((password) => /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password), {
+      message: "Password must contain at least one special character"
+    }),
 })
 
 const LoginPage = () => {
