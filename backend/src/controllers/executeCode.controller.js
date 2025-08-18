@@ -38,11 +38,10 @@ export const executeCode = async (req, res) => {
 
     // poll judge0 for all the submited test cases
     const results = await pollBatchResults(tokens);
-    console.log("results", results);
 
     let allPassed = true;
     const detailedResults = results.map((result, i) => {
-      const stdout = result.stdout?.trim();
+      const stdout = result?.stdout?.trim();
       const expected_output = expected_outputs[i]?.trim();
       const passed = stdout === expected_output;
 

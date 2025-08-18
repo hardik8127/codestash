@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const headers = {
-  Authorization: `Bearer ${process.env.JUDGE0_API_KEY}`, 
+  Authorization: `Bearer ${process.env.JUDGE0_API_KEY}`,
   "Content-Type": "application/json",
   Accept: "application/json",
 };
@@ -41,11 +41,12 @@ export const pollBatchResults = async (tokens) => {
           tokens: tokens.join(","),
           base64_encoded: false,
         },
+        headers,
       }
     );
     const results = data.submissions;
     const isAllDone = results.every(
-      (r) => r.status.id !== 1 && r.status.id !== 2
+      (r) => r?.status.id !== 1 && r?.status.id !== 2
     );
 
     if (isAllDone) return results;
