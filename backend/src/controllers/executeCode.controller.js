@@ -3,7 +3,6 @@ import {
   pollBatchResults,
   submitBatch,
 } from "../libs/judge0.lib.js";
-import { db } from "../libs/db.js";
 
 export const executeCode = async (req, res) => {
   try {

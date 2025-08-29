@@ -2,7 +2,36 @@ import React from 'react';
 import { CheckCircle2, XCircle, Clock, MemoryStick as Memory, Terminal, Code2 } from 'lucide-react';
 
 const Submission = ({ submission }) => {
-  if (!submission || !Array.isArray(submission)) {
+  // Handle different submission formats
+  let testResults = [];
+  
+  if (!submission) {
+    return (
+      <div className="text-center text-gray-400 py-8">
+        <Terminal className="w-12 h-12 mx-auto text-blue-400/40 mb-4" />
+        <p className="text-lg text-gray-300">No execution results</p>
+        <p className="text-sm mt-2">Run your code to see the results</p>
+      </div>
+    );
+  }
+  
+  // Check if submission is an array (execution result) or object (submit result)
+  if (Array.isArray(submission)) {
+    testResults = submission;
+  } else if (submission.testCases && Array.isArray(submission.testCases)) {
+    // Transform database testCases to match execution format
+    testResults = submission.testCases.map(tc => ({
+      testCase: tc.testCase,
+      passed: tc.passed,
+      stdout: tc.stdout,
+      expected: tc.expected,
+      stderr: tc.stderr,
+      compile_output: tc.compileOutput,
+      status: tc.status,
+      memory: tc.memory,
+      time: tc.time,
+    }));
+  } else {
     return (
       <div className="text-center text-gray-400 py-8">
         <Terminal className="w-12 h-12 mx-auto text-blue-400/40 mb-4" />
@@ -12,19 +41,29 @@ const Submission = ({ submission }) => {
     );
   }
 
+  if (!testResults.length) {
+    return (
+      <div className="text-center text-gray-400 py-8">
+        <Terminal className="w-12 h-12 mx-auto text-blue-400/40 mb-4" />
+        <p className="text-lg text-gray-300">No test results</p>
+        <p className="text-sm mt-2">Run your code to see the results</p>
+      </div>
+    );
+  }
+
   // Calculate statistics from the results array
-  const passedTests = submission.filter(tc => tc.passed).length;
-  const totalTests = submission.length;
+  const passedTests = testResults.filter(tc => tc.passed).length;
+  const totalTests = testResults.length;
   const successRate = totalTests > 0 ? (passedTests / totalTests) * 100 : 0;
   const allPassed = passedTests === totalTests;
 
   // Calculate averages for memory and time
-  const memoryValues = submission
+  const memoryValues = testResults
     .filter(tc => tc.memory)
     .map(tc => parseFloat(tc.memory.replace(' KB', '')))
     .filter(val => !isNaN(val));
   
-  const timeValues = submission
+  const timeValues = testResults
     .filter(tc => tc.time)
     .map(tc => parseFloat(tc.time.replace(' s', '')))
     .filter(val => !isNaN(val));
@@ -117,7 +156,7 @@ const Submission = ({ submission }) => {
                 </tr>
               </thead>
               <tbody>
-                {submission.map((testCase, index) => (
+                {testResults.map((testCase, index) => (
                   <tr 
                     key={index} 
                     className={`hover:bg-blue-500/5 transition-colors border-b border-gray-800 group ${
@@ -167,14 +206,14 @@ const Submission = ({ submission }) => {
           </div>
 
           {/* Error Details Section */}
-          {submission.some(tc => tc.stderr || tc.compile_output) && (
+          {testResults.some(tc => tc.stderr || tc.compile_output) && (
             <div className="mt-6">
               <h3 className="text-lg font-bold text-white mb-4 flex items-center">
                 <XCircle className="w-5 h-5 mr-2 text-red-400" />
                 Error Details
               </h3>
               <div className="space-y-3">
-                {submission.map((testCase, index) => {
+                {testResults.map((testCase, index) => {
                   if (!testCase.stderr && !testCase.compile_output) return null;
                   
                   return (

@@ -20,7 +20,7 @@ import {
 import { Link, useParams } from "react-router-dom";
 import { useProblemStore } from "../store/useProblemStore";
 import { getLanguageId } from "../lib/lang";
-import { useExecutionStore } from "../store/useExecutionStore";
+import { useExecutionStore, useSubmitStore } from "../store/useExecutionStore";
 import { useSubmissionStore } from "../store/useSubmissionStore";
 import Submission from "../components/Submission";
 import SubmissionsList from "../components/SubmissionList";
@@ -47,6 +47,7 @@ const ProblemPage = () => {
   const [difficulty, setDifficulty] = useState("Medium"); // Can be dynamically set based on problem data
 
   const { executeCode, submission, isExecuting } = useExecutionStore();
+  const { executeCode: submitCode, submission: submitSubmission, isExecuting: isSubmitting } = useSubmitStore();
 
   // Animation variants
   const containerVariants = {
@@ -95,9 +96,13 @@ const ProblemPage = () => {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Add keyboard shortcut: Ctrl+Enter to run code
+      // Add keyboard shortcut: Ctrl+Enter to run code, Ctrl+Shift+Enter to submit
       if (e.ctrlKey && e.key === "Enter") {
-        handleRunCode(e);
+        if (e.shiftKey) {
+          handleSubmitCode(e);
+        } else {
+          handleRunCode(e);
+        }
       }
     };
 
@@ -134,6 +139,30 @@ const ProblemPage = () => {
       executeCode(code, language_id, stdin, expected_outputs, id);
     } catch (error) {
       console.log("Error executing code", error);
+    }
+  };
+
+  const handleSubmitCode = async (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+
+    if (isSubmitting) return;
+
+    try {
+      const language_id = getLanguageId(selectedLanguage);
+      const stdin = problem.testcases.map((tc) => tc.input);
+      const expected_outputs = problem.testcases.map((tc) => tc.output);
+      
+      await submitCode(code, language_id, stdin, expected_outputs, id);
+      
+      // Refresh submissions count and list after successful submit
+      getSubmissionCountForProblem(id);
+      if (activeTab === "submissions") {
+        getSubmissionForProblem(id);
+      }
+    } catch (error) {
+      console.log("Error submitting code", error);
     }
   };
 
@@ -336,8 +365,14 @@ const ProblemPage = () => {
             {!isExecuting && <Play className="w-4 h-4" />}
             Run
           </button>
-          <button className="btn btn-sm gap-2 bg-green-500 hover:bg-green-600 text-white border-none">
-            <ChevronRight className="w-4 h-4" />
+          <button 
+            className={`btn btn-sm gap-2 bg-green-500 hover:bg-green-600 text-white border-none ${
+              isSubmitting ? "loading" : ""
+            }`}
+            onClick={handleSubmitCode}
+            disabled={isSubmitting}
+          >
+            {!isSubmitting && <ChevronRight className="w-4 h-4" />}
             Submit
           </button>
         </div>
@@ -451,15 +486,18 @@ const ProblemPage = () => {
                     </span>
                     <span>|</span>
                     <span>
-                      Use{" "}
                       <kbd className="px-2 py-0.5 bg-blue-500/10 rounded text-xs text-blue-400">
                         Ctrl+Enter
                       </kbd>{" "}
-                      to run code
+                      to run,{" "}
+                      <kbd className="px-2 py-0.5 bg-green-500/10 rounded text-xs text-green-400">
+                        Ctrl+Shift+Enter
+                      </kbd>{" "}
+                      to submit
                     </span>
                   </div>
                   <div className="text-gray-400 text-xs">
-                    {isExecuting && "Running..."}
+                    {(isExecuting || isSubmitting) && (isSubmitting ? "Submitting..." : "Running...")}
                   </div>
                 </div>
               </div>
@@ -472,8 +510,8 @@ const ProblemPage = () => {
           variants={itemVariants}
         >
           <div className="card-body w-full">
-            {submission ? (
-              <Submission submission={submission} />
+            {(submission || submitSubmission) ? (
+              <Submission submission={submitSubmission || submission} />
             ) : (
               <>
                 <div className="flex items-center justify-between mb-4 w-full">
